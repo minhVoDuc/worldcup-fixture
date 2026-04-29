@@ -1,0 +1,860 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700;900&family=Baloo+2:wght@400;600;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --matcha-50:  #F2F8EE;
+    --matcha-100: #E8F3E0;
+    --matcha-200: #B8D4A8;
+    --matcha-400: #7FAE6E;
+    --matcha-600: #4A7A3A;
+    --matcha-800: #2C5022;
+    --pink-50:    #FFF0F5;
+    --pink-100:   #FCE4EC;
+    --pink-200:   #F4A7B9;
+    --pink-400:   #E07090;
+    --pink-600:   #C2718A;
+    --pink-800:   #7A3048;
+    --cream:      #FDF8F0;
+    --warm-dark:  #3A3A3A;
+    --warm-mid:   #6B6B6B;
+    --warm-light: #9C9C90;
+    --star:       #F9D94E;
+    --star-dark:  #C9A320;
+    --status-live:    #E8524A;
+    --status-live-bg: #FEF0EF;
+    --status-done:    #6B6B6B;
+    --status-done-bg: #F1EFE8;
+    --status-soon:    #4A7A3A;
+    --status-soon-bg: #E8F3E0;
+    --status-warn:    #B07A18;
+    --status-warn-bg: #FEF5DC;
+    --dm-bg:      #1C1C1A;
+    --dm-surface: #2A2A28;
+    --dm-border:  #3E3E3C;
+    --dm-text:    #F0EDE8;
+    --dm-muted:   #9C9C90;
+    --spacing-1: 4px;
+    --spacing-2: 8px;
+    --spacing-3: 12px;
+    --spacing-4: 16px;
+    --spacing-5: 24px;
+    --spacing-6: 32px;
+    --spacing-7: 48px;
+    --r-sm: 8px;
+    --r-md: 12px;
+    --r-lg: 16px;
+    --r-pill: 100px;
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    color: var(--warm-dark);
+    background: #f5f2ee;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .ds-page { padding: 32px; max-width: 900px; margin: 0 auto; }
+
+  .ds-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 3px solid var(--matcha-200);
+  }
+
+  .ds-logo {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--matcha-600);
+  }
+
+  .ds-logo span { color: var(--pink-600); }
+
+  .ds-tagline {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--warm-mid);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .ds-version {
+    margin-left: auto;
+    background: var(--matcha-100);
+    color: var(--matcha-600);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: var(--r-pill);
+    letter-spacing: 0.5px;
+  }
+
+  .section-block {
+    margin-bottom: 44px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--warm-light);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #ddd9d2;
+  }
+
+  /* TYPOGRAPHY */
+  .type-specimen { display: flex; flex-direction: column; gap: 10px; }
+
+  .type-row {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    padding: 14px 20px;
+    background: white;
+    border-radius: var(--r-md);
+    border: 1px solid #e8e4de;
+  }
+
+  .type-meta {
+    min-width: 160px;
+    flex-shrink: 0;
+  }
+
+  .type-name { font-size: 11px; font-weight: 700; color: var(--warm-mid); }
+  .type-spec { font-size: 10px; color: var(--warm-light); margin-top: 2px; }
+
+  .type-sample { flex: 1; }
+
+  .t-display { font-family: 'Baloo 2', sans-serif; font-size: 36px; font-weight: 800; color: var(--matcha-600); line-height: 1.1; }
+  .t-h1      { font-family: 'Baloo 2', sans-serif; font-size: 28px; font-weight: 800; color: var(--warm-dark); line-height: 1.2; }
+  .t-h2      { font-family: 'Baloo 2', sans-serif; font-size: 22px; font-weight: 800; color: var(--warm-dark); }
+  .t-h3      { font-family: 'Baloo 2', sans-serif; font-size: 18px; font-weight: 600; color: var(--warm-dark); }
+  .t-body    { font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 400; color: var(--warm-dark); line-height: 1.6; letter-spacing: 0.2px; }
+  .t-label   { font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; color: var(--warm-mid); letter-spacing: 0.5px; }
+  .t-caption { font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 400; color: var(--warm-light); }
+  .t-score   { font-family: 'Baloo 2', sans-serif; font-size: 32px; font-weight: 800; color: var(--matcha-600); line-height: 1; }
+  .t-mono    { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--matcha-600); letter-spacing: 1px; }
+
+  /* COLORS */
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+  }
+
+  .swatch-group { display: flex; flex-direction: column; gap: 4px; }
+
+  .swatch {
+    height: 52px;
+    border-radius: var(--r-md);
+    border: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    align-items: flex-end;
+    padding: 6px 8px;
+  }
+
+  .swatch-hex {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  .swatch-name {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--warm-dark);
+    margin-bottom: 2px;
+  }
+
+  .swatch-role {
+    font-size: 9px;
+    color: var(--warm-light);
+  }
+
+  /* SPACING */
+  .spacing-row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    padding: 16px 20px;
+    background: white;
+    border-radius: var(--r-md);
+    border: 1px solid #e8e4de;
+  }
+
+  .space-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .space-bar  { background: var(--matcha-200); border-radius: 3px; width: 100%; min-width: 8px; }
+  .space-label { font-size: 9px; font-weight: 700; color: var(--warm-mid); text-align: center; }
+
+  /* RADIUS */
+  .radius-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 16px 20px;
+    background: white;
+    border-radius: var(--r-md);
+    border: 1px solid #e8e4de;
+  }
+
+  .radius-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .radius-box  {
+    width: 56px; height: 40px;
+    background: var(--matcha-100);
+    border: 2px solid var(--matcha-200);
+  }
+  .radius-label { font-size: 9px; font-weight: 700; color: var(--warm-mid); text-align: center; }
+
+  /* STATUS BADGES */
+  .badges-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 16px 20px;
+    background: white;
+    border-radius: var(--r-md);
+    border: 1px solid #e8e4de;
+    align-items: center;
+  }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: var(--r-pill);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    letter-spacing: 0.3px;
+  }
+
+  .badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* INTERACTIVE STATES */
+  .states-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .state-card {
+    background: white;
+    border-radius: var(--r-md);
+    border: 1px solid #e8e4de;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .state-label { font-size: 10px; font-weight: 700; color: var(--warm-light); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+
+  .btn-demo {
+    display: inline-block;
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: var(--r-sm);
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .btn-default  { background: white; color: var(--matcha-600); border: 2px solid var(--matcha-200); }
+  .btn-hover    { background: var(--matcha-100); color: var(--matcha-600); border: 2px solid var(--matcha-400); }
+  .btn-active   { background: var(--matcha-400); color: white; border: 2px solid var(--matcha-600); }
+  .btn-disabled { background: #f0ede8; color: var(--warm-light); border: 2px solid #ddd9d2; cursor: not-allowed; }
+
+  .link-demo { font-size: 12px; font-weight: 700; text-decoration: none; display: block; margin-top: 8px; }
+  .link-default  { color: var(--pink-600); border-bottom: 2px solid var(--pink-100); }
+  .link-hover    { color: var(--pink-800); border-bottom: 2px solid var(--pink-400); }
+  .link-visited  { color: var(--warm-light); border-bottom: 2px solid #ddd9d2; }
+  .link-active   { color: var(--matcha-600); border-bottom: 2px solid var(--matcha-400); }
+
+  /* SKELETON */
+  .skeleton-card {
+    background: white;
+    border-radius: var(--r-md);
+    border: 1px solid #e8e4de;
+    padding: 16px;
+  }
+
+  .skel {
+    background: linear-gradient(90deg, #ede9e3 25%, #f5f2ee 50%, #ede9e3 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+    border-radius: var(--r-sm);
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* DARK MODE PREVIEW */
+  .dm-preview {
+    background: var(--dm-bg);
+    border-radius: var(--r-lg);
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .dm-card {
+    background: var(--dm-surface);
+    border-radius: var(--r-md);
+    border: 1px solid var(--dm-border);
+    padding: 14px;
+  }
+
+  .dm-title { font-family: 'Baloo 2', sans-serif; font-size: 15px; font-weight: 800; color: var(--dm-text); margin-bottom: 6px; }
+  .dm-sub   { font-size: 11px; color: var(--dm-muted); margin-bottom: 12px; }
+  .dm-score { font-family: 'Baloo 2', sans-serif; font-size: 26px; font-weight: 800; color: #9DD98A; }
+
+  .dm-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: var(--r-pill);
+    background: rgba(157,217,138,0.15);
+    color: #9DD98A;
+    border: 1px solid rgba(157,217,138,0.3);
+  }
+
+  .dm-pink-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: var(--r-pill);
+    background: rgba(240,140,165,0.15);
+    color: #F08CA5;
+    border: 1px solid rgba(240,140,165,0.3);
+  }
+
+  .dm-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--dm-border); }
+  .dm-row:last-child { border-bottom: none; }
+  .dm-row-name { font-size: 11px; font-weight: 700; color: var(--dm-text); }
+  .dm-row-pts { font-size: 12px; font-weight: 800; color: #9DD98A; }
+
+  /* ICON SYSTEM */
+  .icon-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 16px 20px;
+    background: white;
+    border-radius: var(--r-md);
+    border: 1px solid #e8e4de;
+    align-items: center;
+  }
+
+  .icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 56px;
+  }
+
+  .icon-box {
+    width: 44px; height: 44px;
+    border-radius: var(--r-sm);
+    background: var(--matcha-100);
+    border: 1px solid var(--matcha-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-box.pink { background: var(--pink-100); border-color: var(--pink-200); }
+  .icon-box.star { background: #FEF8DC; border-color: #F0D878; }
+  .icon-box.dark { background: var(--dm-surface); border-color: var(--dm-border); }
+
+  .icon-name { font-size: 9px; font-weight: 700; color: var(--warm-light); text-align: center; }
+
+  /* MOTION */
+  .motion-row {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    padding: 16px 20px;
+    background: white;
+    border-radius: var(--r-md);
+    border: 1px solid #e8e4de;
+    align-items: center;
+  }
+
+  .motion-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .motion-ball { width: 28px; height: 28px; border-radius: 50%; background: var(--matcha-400); }
+  .motion-label { font-size: 9px; font-weight: 700; color: var(--warm-light); text-align: center; }
+
+  .anim-pulse { animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+
+  .anim-bounce { animation: bounce 1.2s ease-in-out infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+  .anim-spin { animation: spin 2s linear infinite; border-radius: 0; border: 3px solid var(--matcha-200); border-top-color: var(--matcha-400); background: transparent; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+
+  .anim-shimmer-demo { width: 80px; height: 28px; border-radius: var(--r-sm); }
+
+  .anim-twinkle { animation: twinkle 1.8s ease-in-out infinite; background: var(--star); clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%); border-radius: 0; }
+  @keyframes twinkle { 0%,100%{transform:scale(1) rotate(0deg)} 50%{transform:scale(1.2) rotate(15deg)} }
+
+  /* COMPONENT SAMPLES */
+  .comp-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+  .match-mini {
+    background: white;
+    border: 2px solid var(--matcha-200);
+    border-radius: var(--r-lg);
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .match-mini::before {
+    content:'';
+    position:absolute;top:0;left:0;right:0;height:3px;
+    background: linear-gradient(90deg,#ff8fa3,#ffb347,#fff176,#a5d6a7,#90caf9,#ce93d8);
+  }
+
+  .mm-meta { font-size: 9px; font-weight: 700; color: var(--warm-mid); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; display:flex; justify-content:space-between; }
+  .mm-live { background: var(--status-live); color: white; font-size:8px; font-weight:700; padding:2px 7px; border-radius:var(--r-pill); }
+  .mm-done { background: var(--status-done-bg); color: var(--status-done); font-size:8px; font-weight:700; padding:2px 7px; border-radius:var(--r-pill); }
+  .mm-soon { background: var(--status-soon-bg); color: var(--status-soon); font-size:8px; font-weight:700; padding:2px 7px; border-radius:var(--r-pill); }
+
+  .mm-teams { display:flex; align-items:center; justify-content:space-between; gap:6px; }
+  .mm-team { text-align:center; flex:1; }
+  .mm-flag { font-size:20px; }
+  .mm-name { font-size:10px; font-weight:700; color:var(--warm-dark); }
+  .mm-score-box { background:var(--matcha-100); border-radius:8px; padding:4px 10px; text-align:center; }
+  .mm-score { font-family:'Baloo 2',sans-serif; font-size:16px; font-weight:800; color:var(--matcha-600); }
+  .mm-time { font-size:9px; color:var(--warm-mid); font-weight:700; }
+
+  .divider { height:1px; background:#e8e4de; margin:4px 0 16px; }
+</style>
+
+<div class="ds-page">
+  <div class="ds-header">
+    <div>
+      <div class="ds-logo">WC <span>2026</span></div>
+      <div class="ds-tagline">Design System — Final Resource</div>
+    </div>
+    <div class="ds-version">v1.0 · Apr 2026</div>
+  </div>
+
+  <!-- TYPOGRAPHY -->
+  <div class="section-block">
+    <div class="section-label">Typography</div>
+    <div class="type-specimen">
+      <div class="type-row">
+        <div class="type-meta"><div class="type-name">Display / Logo</div><div class="type-spec">Baloo 2 · 800 · 36px</div></div>
+        <div class="type-sample"><div class="t-display">WC 2026</div></div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta"><div class="type-name">Heading 1</div><div class="type-spec">Baloo 2 · 800 · 28px · lh 1.2</div></div>
+        <div class="type-sample"><div class="t-h1">The Greatest Football Festival</div></div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta"><div class="type-name">Heading 2</div><div class="type-spec">Baloo 2 · 800 · 22px</div></div>
+        <div class="type-sample"><div class="t-h2">Today's Matches</div></div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta"><div class="type-name">Heading 3</div><div class="type-spec">Baloo 2 · 600 · 18px</div></div>
+        <div class="type-sample"><div class="t-h3">Group A Standings</div></div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta"><div class="type-name">Body</div><div class="type-spec">Nunito · 400 · 15px · lh 1.6 · ls 0.2px</div></div>
+        <div class="type-sample"><div class="t-body">USA · Canada · Mexico · 48 teams · 104 matches. Real-time scores and standings.</div></div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta"><div class="type-name">Label / UI</div><div class="type-spec">Nunito · 700 · 12px · ls 0.5px</div></div>
+        <div class="type-sample"><div class="t-label">Group Stage · Match Day 2</div></div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta"><div class="type-name">Caption / Hint</div><div class="type-spec">Nunito · 400 · 11px</div></div>
+        <div class="type-sample"><div class="t-caption">Last updated 2 min ago · All times in local timezone</div></div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta"><div class="type-name">Score / Countdown</div><div class="type-spec">Baloo 2 · 800 · 32px · lh 1</div></div>
+        <div class="type-sample"><div class="t-score">2 – 1</div></div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta"><div class="type-name">Countdown Units</div><div class="type-spec">Nunito · 700 · 13px · ls 1px · uppercase</div></div>
+        <div class="type-sample"><div class="t-mono">DAYS · HRS · MIN · SEC</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLOR PALETTE -->
+  <div class="section-block">
+    <div class="section-label">Color Palette</div>
+    <div class="color-grid">
+      <div class="swatch-group">
+        <div class="swatch-name">Matcha Primary</div>
+        <div class="swatch" style="background:#7FAE6E"><span class="swatch-hex" style="color:#2C5022">#7FAE6E</span></div>
+        <div class="swatch-role">Buttons, scores, borders</div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch-name">Matcha Light</div>
+        <div class="swatch" style="background:#B8D4A8"><span class="swatch-hex" style="color:#2C5022">#B8D4A8</span></div>
+        <div class="swatch-role">Card borders, dividers</div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch-name">Matcha Pale</div>
+        <div class="swatch" style="background:#E8F3E0"><span class="swatch-hex" style="color:#4A7A3A">#E8F3E0</span></div>
+        <div class="swatch-role">Hero bg, score boxes</div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch-name">Matcha Dark</div>
+        <div class="swatch" style="background:#4A7A3A"><span class="swatch-hex" style="color:#F2F8EE">#4A7A3A</span></div>
+        <div class="swatch-role">Active nav, headings</div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch-name">Soft Pink</div>
+        <div class="swatch" style="background:#F4A7B9"><span class="swatch-hex" style="color:#7A3048">#F4A7B9</span></div>
+        <div class="swatch-role">Badges, accents</div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch-name">Pink Pale</div>
+        <div class="swatch" style="background:#FCE4EC"><span class="swatch-hex" style="color:#C2718A">#FCE4EC</span></div>
+        <div class="swatch-role">Standings bg, headers</div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch-name">Pink Dark</div>
+        <div class="swatch" style="background:#C2718A"><span class="swatch-hex" style="color:#FFF0F5">#C2718A</span></div>
+        <div class="swatch-role">Links, see-all text</div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch-name">Cream Base</div>
+        <div class="swatch" style="background:#FDF8F0;border:1px solid #e8e4de"><span class="swatch-hex" style="color:#6B6B6B">#FDF8F0</span></div>
+        <div class="swatch-role">Page background</div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch-name">Star Gold</div>
+        <div class="swatch" style="background:#F9D94E"><span class="swatch-hex" style="color:#C9A320">#F9D94E</span></div>
+        <div class="swatch-role">Stars, trophy accents</div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch-name">Text Dark</div>
+        <div class="swatch" style="background:#3A3A3A"><span class="swatch-hex" style="color:#f0ede8">#3A3A3A</span></div>
+        <div class="swatch-role">Primary text</div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch-name">Text Mid</div>
+        <div class="swatch" style="background:#6B6B6B"><span class="swatch-hex" style="color:#f0ede8">#6B6B6B</span></div>
+        <div class="swatch-role">Secondary / muted</div>
+      </div>
+      <div class="swatch-group">
+        <div class="swatch-name">Text Light</div>
+        <div class="swatch" style="background:#9C9C90"><span class="swatch-hex" style="color:#f0ede8">#9C9C90</span></div>
+        <div class="swatch-role">Captions, hints</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATUS COLORS -->
+  <div class="section-block">
+    <div class="section-label">Status &amp; Semantic Colors</div>
+    <div class="badges-row">
+      <div class="badge" style="background:var(--status-live-bg);color:var(--status-live)">
+        <span class="badge-dot" style="background:var(--status-live)"></span> Live · #E8524A / #FEF0EF
+      </div>
+      <div class="badge" style="background:var(--status-soon-bg);color:var(--status-soon)">
+        <span class="badge-dot" style="background:var(--status-soon)"></span> Upcoming · #4A7A3A / #E8F3E0
+      </div>
+      <div class="badge" style="background:var(--status-done-bg);color:var(--status-done)">
+        <span class="badge-dot" style="background:var(--status-done)"></span> Finished · #6B6B6B / #F1EFE8
+      </div>
+      <div class="badge" style="background:var(--status-warn-bg);color:var(--status-warn)">
+        <span class="badge-dot" style="background:var(--status-warn)"></span> Postponed · #B07A18 / #FEF5DC
+      </div>
+      <div class="badge" style="background:var(--pink-100);color:var(--pink-800)">
+        <span class="badge-dot" style="background:var(--pink-600)"></span> Highlight · #7A3048 / #FCE4EC
+      </div>
+    </div>
+  </div>
+
+  <!-- SPACING -->
+  <div class="section-block">
+    <div class="section-label">Spacing Scale</div>
+    <div class="spacing-row">
+      <div class="space-item"><div class="space-bar" style="height:4px;width:20px"></div><div class="space-label">4px<br>--sp-1</div></div>
+      <div class="space-item"><div class="space-bar" style="height:8px;width:24px"></div><div class="space-label">8px<br>--sp-2</div></div>
+      <div class="space-item"><div class="space-bar" style="height:12px;width:28px"></div><div class="space-label">12px<br>--sp-3</div></div>
+      <div class="space-item"><div class="space-bar" style="height:16px;width:32px"></div><div class="space-label">16px<br>--sp-4</div></div>
+      <div class="space-item"><div class="space-bar" style="height:24px;width:36px"></div><div class="space-label">24px<br>--sp-5</div></div>
+      <div class="space-item"><div class="space-bar" style="height:32px;width:40px"></div><div class="space-label">32px<br>--sp-6</div></div>
+      <div class="space-item"><div class="space-bar" style="height:48px;width:44px"></div><div class="space-label">48px<br>--sp-7</div></div>
+      <div style="margin-left:auto;font-size:11px;color:var(--warm-light);line-height:1.7">
+        Use <strong style="color:var(--warm-mid)">px</strong> within components (8, 12, 16px gaps)<br>
+        Use <strong style="color:var(--warm-mid)">rem</strong> for vertical rhythm (1rem, 1.5rem, 2rem)<br>
+        Base unit: <strong style="color:var(--warm-mid)">4px</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- BORDER RADIUS -->
+  <div class="section-block">
+    <div class="section-label">Border Radius</div>
+    <div class="radius-row">
+      <div class="radius-item"><div class="radius-box" style="border-radius:4px"></div><div class="radius-label">4px<br>--r-xs<br>tags, chips</div></div>
+      <div class="radius-item"><div class="radius-box" style="border-radius:8px"></div><div class="radius-label">8px<br>--r-sm<br>inputs, score</div></div>
+      <div class="radius-item"><div class="radius-box" style="border-radius:12px"></div><div class="radius-label">12px<br>--r-md<br>sections</div></div>
+      <div class="radius-item"><div class="radius-box" style="border-radius:16px"></div><div class="radius-label">16px<br>--r-lg<br>cards</div></div>
+      <div class="radius-item"><div class="radius-box" style="border-radius:24px"></div><div class="radius-label">24px<br>--r-xl<br>hero, frames</div></div>
+      <div class="radius-item"><div class="radius-box" style="border-radius:100px"></div><div class="radius-label">pill<br>--r-pill<br>badges, btns</div></div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE STATES -->
+  <div class="section-block">
+    <div class="section-label">Interactive States</div>
+    <div class="states-grid">
+      <div class="state-card">
+        <div class="state-label">Default</div>
+        <div class="btn-demo btn-default">View match</div>
+        <a class="link-demo link-default">See all results</a>
+      </div>
+      <div class="state-card">
+        <div class="state-label">Hover</div>
+        <div class="btn-demo btn-hover">View match</div>
+        <a class="link-demo link-hover">See all results</a>
+      </div>
+      <div class="state-card">
+        <div class="state-label">Active / Selected</div>
+        <div class="btn-demo btn-active">View match</div>
+        <a class="link-demo link-active">See all results</a>
+      </div>
+      <div class="state-card">
+        <div class="state-label">Disabled</div>
+        <div class="btn-demo btn-disabled">View match</div>
+        <a class="link-demo link-visited">No matches yet</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPONENT VARIANTS -->
+  <div class="section-block">
+    <div class="section-label">Match Card Variants</div>
+    <div class="comp-row">
+      <div class="match-mini" style="border-top:3px solid var(--status-live)">
+        <div class="mm-meta">Group A <span class="mm-live">● LIVE</span></div>
+        <div class="mm-teams">
+          <div class="mm-team"><div class="mm-flag">🇧🇷</div><div class="mm-name">Brazil</div></div>
+          <div class="mm-score-box"><div class="mm-score">2–1</div><div class="mm-time">74'</div></div>
+          <div class="mm-team"><div class="mm-flag">🇩🇪</div><div class="mm-name">Germany</div></div>
+        </div>
+      </div>
+      <div class="match-mini">
+        <div class="mm-meta">Group C · 20:00 <span class="mm-soon">Upcoming</span></div>
+        <div class="mm-teams">
+          <div class="mm-team"><div class="mm-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div><div class="mm-name">England</div></div>
+          <div class="mm-score-box" style="background:var(--pink-100)"><div class="mm-score" style="color:var(--pink-600);font-size:13px">vs</div><div class="mm-time">20:00</div></div>
+          <div class="mm-team"><div class="mm-flag">🇯🇵</div><div class="mm-name">Japan</div></div>
+        </div>
+      </div>
+      <div class="match-mini" style="opacity:0.85">
+        <div class="mm-meta">Group B · FT <span class="mm-done">Finished</span></div>
+        <div class="mm-teams">
+          <div class="mm-team"><div class="mm-flag">🇫🇷</div><div class="mm-name">France</div></div>
+          <div class="mm-score-box" style="background:var(--status-done-bg)"><div class="mm-score" style="color:var(--status-done)">3–1</div><div class="mm-time">FT</div></div>
+          <div class="mm-team"><div class="mm-flag">🇳🇬</div><div class="mm-name">Nigeria</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKELETON / LOADING -->
+  <div class="section-block">
+    <div class="section-label">Loading / Skeleton States</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="skeleton-card">
+        <div class="skel" style="height:10px;width:60%;margin-bottom:12px"></div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="skel" style="width:32px;height:32px;border-radius:50%"></div>
+          <div class="skel" style="height:24px;flex:1;border-radius:6px"></div>
+          <div class="skel" style="width:32px;height:32px;border-radius:50%"></div>
+        </div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skel" style="height:10px;width:40%;margin-bottom:10px"></div>
+        <div class="skel" style="height:10px;width:100%;margin-bottom:6px"></div>
+        <div class="skel" style="height:10px;width:100%;margin-bottom:6px"></div>
+        <div class="skel" style="height:10px;width:80%"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skel" style="height:10px;width:50%;margin-bottom:10px"></div>
+        <div class="skel" style="height:60px;width:100%;border-radius:10px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOTION -->
+  <div class="section-block">
+    <div class="section-label">Motion &amp; Animation Tokens</div>
+    <div class="motion-row">
+      <div class="motion-item"><div class="motion-ball anim-pulse"></div><div class="motion-label">pulse<br>live badge<br>2s ease</div></div>
+      <div class="motion-item"><div class="motion-ball anim-bounce" style="background:var(--pink-400)"></div><div class="motion-label">bounce<br>hero entry<br>1.2s ease</div></div>
+      <div class="motion-item"><div class="motion-ball anim-spin"></div><div class="motion-label">spin<br>loading ring<br>2s linear</div></div>
+      <div class="motion-item"><div class="motion-ball anim-shimmer-demo skel"></div><div class="motion-label">shimmer<br>skeleton<br>1.5s ease</div></div>
+      <div class="motion-item"><div class="motion-ball anim-twinkle" style="width:28px;height:28px"></div><div class="motion-label">twinkle<br>star deco<br>1.8s ease</div></div>
+      <div style="margin-left:auto;font-size:11px;color:var(--warm-light);line-height:2">
+        <div>Hover transition: <strong style="color:var(--warm-mid)">0.18s ease</strong></div>
+        <div>Page reveal: <strong style="color:var(--warm-mid)">0.3s ease-out</strong></div>
+        <div>Stagger delay: <strong style="color:var(--warm-mid)">0.07s per item</strong></div>
+        <div>Score update: <strong style="color:var(--warm-mid)">0.25s ease-in-out</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DARK MODE -->
+  <div class="section-block">
+    <div class="section-label">Dark Mode Palette Preview</div>
+    <div class="dm-preview">
+      <div class="dm-card">
+        <div class="dm-title">Brazil vs Germany</div>
+        <div class="dm-sub">Group A · 74' played</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="dm-score">2 – 1</div>
+          <div class="dm-badge">● LIVE</div>
+        </div>
+      </div>
+      <div class="dm-card">
+        <div class="dm-title">Group A Standings</div>
+        <div class="dm-sub">After match day 2</div>
+        <div class="dm-row"><span class="dm-row-name">🇧🇷 Brazil</span><span class="dm-row-pts">9</span></div>
+        <div class="dm-row"><span class="dm-row-name">🇩🇪 Germany</span><span class="dm-row-pts">6</span></div>
+        <div class="dm-row"><span class="dm-row-name">🇲🇽 Mexico</span><span class="dm-row-pts">3</span></div>
+      </div>
+      <div class="dm-card" style="grid-column:span 2;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+        <div>
+          <div class="dm-sub" style="margin-bottom:6px">Dark surface</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:40px;height:28px;border-radius:6px;background:#1C1C1A;border:1px solid #3E3E3C"></div>
+              <div style="font-size:9px;color:var(--dm-muted)">#1C1C1A</div>
+              <div style="font-size:8px;color:var(--dm-muted)">Page bg</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:40px;height:28px;border-radius:6px;background:#2A2A28;border:1px solid #3E3E3C"></div>
+              <div style="font-size:9px;color:var(--dm-muted)">#2A2A28</div>
+              <div style="font-size:8px;color:var(--dm-muted)">Surface</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:40px;height:28px;border-radius:6px;background:#9DD98A;border:1px solid #6AB858"></div>
+              <div style="font-size:9px;color:var(--dm-muted)">#9DD98A</div>
+              <div style="font-size:8px;color:var(--dm-muted)">Matcha DM</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:40px;height:28px;border-radius:6px;background:#F08CA5;border:1px solid #C87090"></div>
+              <div style="font-size:9px;color:var(--dm-muted)">#F08CA5</div>
+              <div style="font-size:8px;color:var(--dm-muted)">Pink DM</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:40px;height:28px;border-radius:6px;background:#F0EDE8;border:1px solid #aaa"></div>
+              <div style="font-size:9px;color:var(--dm-muted)">#F0EDE8</div>
+              <div style="font-size:8px;color:var(--dm-muted)">Text DM</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-left:auto;font-size:11px;color:var(--dm-muted);line-height:1.8">
+          Matcha lightens to <span class="dm-badge" style="font-size:9px;padding:2px 7px">#9DD98A</span> on dark<br>
+          Pink lightens to <span class="dm-pink-badge" style="font-size:9px;padding:2px 7px">#F08CA5</span> on dark<br>
+          All borders use 15–20% white alpha
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ICON GUIDE -->
+  <div class="section-block">
+    <div class="section-label">Icon Style Guide</div>
+    <div class="icon-grid">
+      <div class="icon-item">
+        <div class="icon-box">
+          <svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9" fill="#4A7A3A" opacity="0.15"/><circle cx="11" cy="11" r="6" fill="none" stroke="#4A7A3A" stroke-width="1.5"/><line x1="11" y1="5" x2="11" y2="17" stroke="#4A7A3A" stroke-width="1.5"/><line x1="5" y1="11" x2="17" y2="11" stroke="#4A7A3A" stroke-width="1.5"/></svg>
+        </div>
+        <div class="icon-name">schedule</div>
+      </div>
+      <div class="icon-item">
+        <div class="icon-box">
+          <svg width="22" height="22" viewBox="0 0 22 22"><polygon points="11,3 13.5,8.5 20,9.3 15.5,13.5 16.7,20 11,17 5.3,20 6.5,13.5 2,9.3 8.5,8.5" fill="none" stroke="#4A7A3A" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="icon-name">standings</div>
+      </div>
+      <div class="icon-item">
+        <div class="icon-box">
+          <svg width="22" height="22" viewBox="0 0 22 22"><rect x="3" y="6" width="16" height="12" rx="2" fill="none" stroke="#4A7A3A" stroke-width="1.5"/><line x1="3" y1="10" x2="19" y2="10" stroke="#4A7A3A" stroke-width="1.5"/><line x1="8" y1="3" x2="8" y2="7" stroke="#4A7A3A" stroke-width="1.5" stroke-linecap="round"/><line x1="14" y1="3" x2="14" y2="7" stroke="#4A7A3A" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="icon-name">calendar</div>
+      </div>
+      <div class="icon-item">
+        <div class="icon-box pink">
+          <svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="8" r="4" fill="none" stroke="#C2718A" stroke-width="1.5"/><path d="M4 19c0-3.9 3.1-7 7-7s7 3.1 7 7" fill="none" stroke="#C2718A" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="icon-name">team</div>
+      </div>
+      <div class="icon-item">
+        <div class="icon-box pink">
+          <svg width="22" height="22" viewBox="0 0 22 22"><path d="M11 3l2 5h5l-4 3 1.5 5L11 13l-4.5 3L8 11 4 8h5z" fill="none" stroke="#C2718A" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="icon-name">trophy</div>
+      </div>
+      <div class="icon-item">
+        <div class="icon-box pink">
+          <svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8" fill="none" stroke="#C2718A" stroke-width="1.5"/><line x1="11" y1="7" x2="11" y2="11" stroke="#C2718A" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="14" r="1" fill="#C2718A"/></svg>
+        </div>
+        <div class="icon-name">info</div>
+      </div>
+      <div class="icon-item">
+        <div class="icon-box star">
+          <svg width="22" height="22" viewBox="0 0 22 22"><polygon points="11,3 13.2,8.3 19,9 14.8,13 16.2,19 11,16 5.8,19 7.2,13 3,9 8.8,8.3" fill="#F9D94E" stroke="#C9A320" stroke-width="1"/></svg>
+        </div>
+        <div class="icon-name">favorite</div>
+      </div>
+      <div class="icon-item">
+        <div class="icon-box star">
+          <svg width="22" height="22" viewBox="0 0 22 22"><polyline points="4,12 9,17 18,6" fill="none" stroke="#C9A320" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="icon-name">winner</div>
+      </div>
+      <div class="icon-item">
+        <div class="icon-box dark">
+          <svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8" fill="none" stroke="#9DD98A" stroke-width="1.5"/><line x1="11" y1="7" x2="11" y2="15" stroke="#9DD98A" stroke-width="1.5" stroke-linecap="round"/><line x1="7" y1="11" x2="15" y2="11" stroke="#9DD98A" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="icon-name">icon DM</div>
+      </div>
+      <div style="margin-left:8px;font-size:11px;color:var(--warm-light);line-height:1.9">
+        Style: <strong style="color:var(--warm-mid)">stroke-only, 1.5px, rounded caps</strong><br>
+        Size: <strong style="color:var(--warm-mid)">20–24px in boxes · 16px inline</strong><br>
+        Matcha icons on green bg · Pink icons on pink bg<br>
+        Gold icons for ratings/favorites
+      </div>
+    </div>
+  </div>
+</div>

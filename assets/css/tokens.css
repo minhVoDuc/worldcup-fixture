@@ -1,0 +1,173 @@
+/* ============================================================
+   WC 2026 — Design Tokens
+   Source: wc2026_design_system v1.0
+   ============================================================ */
+
+/* ── Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap');
+
+:root {
+  --font-display: 'Baloo 2', 'Segoe UI', sans-serif;
+  --font-body:    'Nunito',  'Segoe UI', sans-serif;
+
+  /* ── Type Scale (fluid) ── */
+  --text-xs:   clamp(0.6875rem, 0.65rem + 0.2vw, 0.75rem);   /* 11px → 12px */
+  --text-sm:   clamp(0.75rem,   0.7rem  + 0.25vw, 0.875rem); /* 12px → 14px */
+  --text-base: clamp(0.875rem,  0.82rem + 0.3vw,  1rem);     /* 14px → 16px (body 15px target) */
+  --text-lg:   clamp(1rem,      0.9rem  + 0.5vw,  1.25rem);  /* 16px → 20px */
+  --text-xl:   clamp(1.25rem,   1rem    + 1vw,    1.75rem);  /* 20px → 28px h2 */
+  --text-2xl:  clamp(1.5rem,    1.1rem  + 1.5vw,  2.25rem);  /* 24px → 36px h1 */
+  --text-score:clamp(1.75rem,   1.2rem  + 2vw,    2.5rem);   /* score/countdown display */
+  --text-hero: clamp(2rem,      1rem    + 3.5vw,  3.5rem);   /* countdown hero */
+
+  /* ── Spacing (4px base) ── */
+  --sp-1:  0.25rem;  /* 4px  */
+  --sp-2:  0.5rem;   /* 8px  */
+  --sp-3:  0.75rem;  /* 12px */
+  --sp-4:  1rem;     /* 16px */
+  --sp-5:  1.5rem;   /* 24px */
+  --sp-6:  2rem;     /* 32px */
+  --sp-7:  3rem;     /* 48px */
+  --sp-8:  4rem;     /* 64px */
+
+  /* ── Border Radius ── */
+  --r-xs:   4px;
+  --r-sm:   8px;
+  --r-md:   12px;
+  --r-lg:   16px;
+  --r-xl:   24px;
+  --r-pill: 9999px;
+
+  /* ── Transitions ── */
+  --t-fast:   0.18s ease;
+  --t-normal: 0.3s ease-out;
+  --t-slow:   0.5s ease;
+
+  /* ── Content widths ── */
+  --w-narrow:  640px;
+  --w-content: 960px;
+  --w-wide:    1200px;
+}
+
+/* ══ LIGHT MODE ══════════════════════════════════════════════ */
+:root, [data-theme="light"] {
+  /* Matcha */
+  --c-matcha:       #7FAE6E;
+  --c-matcha-light: #B8D4A8;
+  --c-matcha-pale:  #E8F3E0;
+  --c-matcha-dark:  #4A7A3A;
+
+  /* Pink */
+  --c-pink:         #F4A7B9;
+  --c-pink-pale:    #FCE4EC;
+  --c-pink-dark:    #C2718A;
+
+  /* Gold */
+  --c-gold:         #F9D94E;
+  --c-gold-dark:    #C8A800;
+
+  /* Neutrals */
+  --c-bg:           #FDF8F0;
+  --c-surface:      #FFFFFF;
+  --c-surface-2:    #FAF7F2;
+  --c-surface-3:    #F3EDE2;
+  --c-border:       rgba(74, 122, 58, 0.18);
+  --c-divider:      rgba(0, 0, 0, 0.08);
+
+  /* Text */
+  --c-text:         #3A3A3A;
+  --c-text-mid:     #6B6B6B;
+  --c-text-light:   #9C9C90;
+  --c-text-inverse: #FFFFFF;
+
+  /* Status */
+  --c-live:         #E8524A;
+  --c-live-bg:      #FEF0EF;
+  --c-upcoming:     #4A7A3A;
+  --c-upcoming-bg:  #E8F3E0;
+  --c-finished:     #6B6B6B;
+  --c-finished-bg:  #F1EFE8;
+  --c-postponed:    #B07A18;
+  --c-postponed-bg: #FEF5DC;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(74, 122, 58, 0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(74, 122, 58, 0.12), 0 2px 6px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 32px rgba(74, 122, 58, 0.15), 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ══ DARK MODE ═══════════════════════════════════════════════ */
+[data-theme="dark"] {
+  --c-matcha:       #9DD98A;
+  --c-matcha-light: #5A8A4A;
+  --c-matcha-pale:  #1E2E1A;
+  --c-matcha-dark:  #C4EBB4;
+
+  --c-pink:         #F08CA5;
+  --c-pink-pale:    #2A1A20;
+  --c-pink-dark:    #F4B8C8;
+
+  --c-gold:         #F9D94E;
+  --c-gold-dark:    #FFE87A;
+
+  --c-bg:           #141412;
+  --c-surface:      #1C1C1A;
+  --c-surface-2:    #222220;
+  --c-surface-3:    #2A2A28;
+  --c-border:       rgba(157, 217, 138, 0.15);
+  --c-divider:      rgba(255, 255, 255, 0.07);
+
+  --c-text:         #F0EDE8;
+  --c-text-mid:     #A0A09A;
+  --c-text-light:   #6A6A64;
+  --c-text-inverse: #141412;
+
+  --c-live:         #FF7B74;
+  --c-live-bg:      #2A1A18;
+  --c-upcoming:     #9DD98A;
+  --c-upcoming-bg:  #1A2818;
+  --c-finished:     #7A7A74;
+  --c-finished-bg:  #222220;
+  --c-postponed:    #E0A840;
+  --c-postponed-bg: #28220E;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.5);
+}
+
+/* System preference fallback */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --c-matcha:       #9DD98A;
+    --c-matcha-light: #5A8A4A;
+    --c-matcha-pale:  #1E2E1A;
+    --c-matcha-dark:  #C4EBB4;
+    --c-pink:         #F08CA5;
+    --c-pink-pale:    #2A1A20;
+    --c-pink-dark:    #F4B8C8;
+    --c-gold:         #F9D94E;
+    --c-gold-dark:    #FFE87A;
+    --c-bg:           #141412;
+    --c-surface:      #1C1C1A;
+    --c-surface-2:    #222220;
+    --c-surface-3:    #2A2A28;
+    --c-border:       rgba(157, 217, 138, 0.15);
+    --c-divider:      rgba(255, 255, 255, 0.07);
+    --c-text:         #F0EDE8;
+    --c-text-mid:     #A0A09A;
+    --c-text-light:   #6A6A64;
+    --c-text-inverse: #141412;
+    --c-live:         #FF7B74;
+    --c-live-bg:      #2A1A18;
+    --c-upcoming:     #9DD98A;
+    --c-upcoming-bg:  #1A2818;
+    --c-finished:     #7A7A74;
+    --c-finished-bg:  #222220;
+    --c-postponed:    #E0A840;
+    --c-postponed-bg: #28220E;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.5);
+  }
+}
