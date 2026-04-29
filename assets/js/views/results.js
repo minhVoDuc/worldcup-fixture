@@ -4,6 +4,7 @@
    ============================================================ */
 
 import State from '../state.js';
+import MatchModal from '../match-modal.js';
 
 function fmtDate(d) {
   return new Intl.DateTimeFormat('vi-VN', {
@@ -14,14 +15,18 @@ function fmtDate(d) {
 
 function resultCardHTML(m) {
   return `
-  <div class="match-card">
+  <div class="match-card"
+    data-match-id="${m.id}"
+    tabindex="0"
+    role="button"
+    aria-label="Xem chi tiết: ${m.homeTeam.name} vs ${m.awayTeam.name}">
     <div class="match-card__header">
       <span class="match-card__group">${m.group || m.round}</span>
       <span class="badge badge--finished">Kết thúc</span>
     </div>
     <div class="match-card__body">
       <div class="match-team">
-        <span class="team-flag">${m.homeTeam.flag}</span>
+        <span class="flag-emoji" role="img">${m.homeTeam.flag}</span>
         <span class="team-name">${m.homeTeam.name}</span>
       </div>
       <div class="match-score">
@@ -30,7 +35,7 @@ function resultCardHTML(m) {
         <span>${m.score.away}</span>
       </div>
       <div class="match-team match-team--away">
-        <span class="team-flag">${m.awayTeam.flag}</span>
+        <span class="flag-emoji" role="img">${m.awayTeam.flag}</span>
         <span class="team-name">${m.awayTeam.name}</span>
       </div>
     </div>
@@ -84,6 +89,8 @@ function render() {
 }
 
 function afterMount() {
+  const _rList = document.getElementById('results-list') || document.querySelector('.container');
+  if (_rList) MatchModal.attachTo(_rList);
   const bar = document.getElementById('results-filters');
   if (!bar) return;
   bar.addEventListener('click', e => {

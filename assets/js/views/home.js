@@ -80,12 +80,12 @@ function matchCardHTML(m) {
     </div>
     <div class="match-card__body">
       <div class="match-team">
-        <span class="team-flag">${m.homeTeam.flag}</span>
+        <span class="flag-emoji" role="img">${m.homeTeam.flag}</span>
         <span class="team-name">${m.homeTeam.name}</span>
       </div>
       ${scoreBlock}
       <div class="match-team match-team--away">
-        <span class="team-flag">${m.awayTeam.flag}</span>
+        <span class="flag-emoji" role="img">${m.awayTeam.flag}</span>
         <span class="team-name">${m.awayTeam.name}</span>
       </div>
     </div>
@@ -127,9 +127,9 @@ function renderPre(config) {
           </div>
         </div>
         <div class="countdown-hero__hosts">
-          <span class="host-badge">🇺🇸 Hoa Kỳ</span>
-          <span class="host-badge">🇨🇦 Canada</span>
-          <span class="host-badge">🇲🇽 Mexico</span>
+          <span class="host-badge"><span class="flag-emoji" role="img">🇺🇸</span> Hoa Kỳ</span>
+          <span class="host-badge"><span class="flag-emoji" role="img">🇨🇦</span> Canada</span>
+          <span class="host-badge"><span class="flag-emoji" role="img">🇲🇽</span> Mexico</span>
         </div>
       </div>
 

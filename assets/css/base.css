@@ -85,6 +85,15 @@ input, textarea, select,
   }
 }
 
+/* Twemoji flag images — size to match surrounding text */
+img.emoji {
+  height: 1.3em;
+  width: 1.3em;
+  vertical-align: -0.15em;
+  display: inline;
+  pointer-events: none;
+}
+
 /* Utility */
 .sr-only {
   position: absolute;
