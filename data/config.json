@@ -1,16 +1,16 @@
 {
   "tournament": {
-    "name": "FIFA World Cup 2022™",
-    "nameShort": "WC 2022",
-    "startDate": "2022-11-20",
-    "endDate": "2022-12-18",
-    "hosts": ["Qatar"],
-    "totalTeams": 32,
-    "totalMatches": 64
+    "name": "FIFA World Cup 2026™",
+    "nameShort": "WC 2026",
+    "startDate": "2026-06-11",
+    "endDate": "2026-07-19",
+    "hosts": ["USA", "Canada", "Mexico"],
+    "totalTeams": 48,
+    "totalMatches": 104
   },
   "dataSource": "openfootball",
   "openfootball": {
-    "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/master/2022/worldcup.json",
-    "refreshIntervalMs": 60000
+    "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json",
+    "refreshIntervalMs": 30000
   }
 }

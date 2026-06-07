@@ -4,6 +4,7 @@
    + Round of 32 đã có sẵn trong ROUND_ORDER
    ============================================================ */
 import State from '../state.js';
+import { getMatchWinner } from '../utils/match-result.js';
 
 const ROUND_ORDER = [
   'Round of 32','Round of 16','Quarter-final',
@@ -25,15 +26,19 @@ function bracketMatchHTML(m) {
   const isFin  = m.status === 'finished';
   const isLive = m.status === 'live';
 
-  // Xác định winner đúng cho cả PSO
-  const hWin = isFin && (
-    m.hasPen ? m.scorePen?.home > m.scorePen?.away
-             : m.score.home > m.score.away
-  );
-  const aWin = isFin && (
-    m.hasPen ? m.scorePen?.away > m.scorePen?.home
-             : m.score.away > m.score.home
-  );
+  // // Xác định winner đúng cho cả PSO
+  // const hWin = isFin && (
+  //   m.hasPen ? m.scorePen?.home > m.scorePen?.away
+  //            : m.score.home > m.score.away
+  // );
+  // const aWin = isFin && (
+  //   m.hasPen ? m.scorePen?.away > m.scorePen?.home
+  //            : m.score.away > m.score.home
+  // );
+  // Xác định winner đúng cho cả PSO — dùng getMatchWinner
+  const winner = isFin ? getMatchWinner(m) : null;
+  const hWin = winner && winner.name === m.homeTeam.name;
+  const aWin = winner && winner.name === m.awayTeam.name;
 
   // Điểm hiển thị: penalty shootout hoặc FT/AET
   let hScore = '', aScore = '', scoreTag = '';

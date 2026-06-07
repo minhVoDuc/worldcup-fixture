@@ -2,12 +2,12 @@
    WC 2026 — Ending View (Post-tournament)
    ============================================================ */
 import State from '../state.js';
+import { getMatchWinner, getMatchLoser } from '../utils/match-result.js';
 
 function scoreLabel(match) {
   if (!match) return '';
   const { scoreFt, scoreEt, scorePen, hasEt, hasPen } = match;
   if (hasPen && scorePen && scoreFt) {
-    // Ví dụ: 4–2 (PSO)  •  3–3 sau HP  •  2–2 sau 90'
     const penStr = `${scorePen.home}–${scorePen.away} <span class="score-tag">PSO</span>`;
     const etStr  = scoreEt ? `${scoreEt.home}–${scoreEt.away} sau HP` : '';
     const ftStr  = `${scoreFt.home}–${scoreFt.away} sau 90'`;
@@ -27,24 +27,12 @@ function render() {
   const finalMatch = matches.find(m => m.round === 'Final' && m.status === 'finished');
   const thirdMatch = matches.find(m => m.round === 'Match for third place' && m.status === 'finished');
 
-  let champion = null, runnerUp = null, third = null;
-  if (finalMatch && finalMatch.score.home !== null) {
-    // Với trận PSO: score = penalty score, cần so sánh đúng
-    const hWins = finalMatch.hasPen
-      ? finalMatch.scorePen.home > finalMatch.scorePen.away
-      : finalMatch.score.home  > finalMatch.score.away;
-    champion = hWins ? finalMatch.homeTeam : finalMatch.awayTeam;
-    runnerUp = hWins ? finalMatch.awayTeam : finalMatch.homeTeam;
-  }
-  if (thirdMatch && thirdMatch.score.home !== null) {
-    const hWins = thirdMatch.hasPen
-      ? thirdMatch.scorePen.home > thirdMatch.scorePen.away
-      : thirdMatch.score.home   > thirdMatch.score.away;
-    third = hWins ? thirdMatch.homeTeam : thirdMatch.awayTeam;
-  }
+  // ← dùng helper, không tự so sánh score nữa
+  const champion = getMatchWinner(finalMatch);
+  const runnerUp = getMatchLoser(finalMatch);
+  const third    = getMatchWinner(thirdMatch);
 
   const finishedCount = matches.filter(m => m.status === 'finished').length;
-  // Tổng bàn thắng tính theo ft (không tính penalty shootout)
   const totalGoals = matches
     .filter(m => m.status === 'finished' && m.scoreFt)
     .reduce((s, m) => {
