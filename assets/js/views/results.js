@@ -1,8 +1,7 @@
 /* ============================================================
-   WC 2026 — Results View
-   Shows finished matches sorted newest first, filter by group
+   WC 2026 — Results View  v1.1
+   + Score tag PSO / AET cho trận hiệp phụ/penalty
    ============================================================ */
-
 import State from '../state.js';
 import MatchModal from '../match-modal.js';
 
@@ -14,11 +13,29 @@ function fmtDate(d) {
 }
 
 function resultCardHTML(m) {
+  // Xác định điểm hiển thị + tag
+  let hScore = m.score.home, aScore = m.score.away;
+  let scoreTag = '';
+  let subScore = '';
+
+  if (m.hasPen && m.scorePen) {
+    hScore   = m.scorePen.home;
+    aScore   = m.scorePen.away;
+    scoreTag = '<span class="score-tag">PSO</span>';
+    const etStr = m.scoreEt ? `${m.scoreEt.home}–${m.scoreEt.away} AET` : '';
+    const ftStr = m.scoreFt ? `${m.scoreFt.home}–${m.scoreFt.away} FT`  : '';
+    subScore = [etStr, ftStr].filter(Boolean).join(' · ');
+  } else if (m.hasEt && m.scoreEt) {
+    hScore   = m.scoreEt.home;
+    aScore   = m.scoreEt.away;
+    scoreTag = '<span class="score-tag">AET</span>';
+    subScore = m.scoreFt ? `${m.scoreFt.home}–${m.scoreFt.away} FT` : '';
+  }
+
   return `
   <div class="match-card"
     data-match-id="${m.id}"
-    tabindex="0"
-    role="button"
+    tabindex="0" role="button"
     aria-label="Xem chi tiết: ${m.homeTeam.name} vs ${m.awayTeam.name}">
     <div class="match-card__header">
       <span class="match-card__group">${m.group || m.round}</span>
@@ -30,9 +47,13 @@ function resultCardHTML(m) {
         <span class="team-name">${m.homeTeam.name}</span>
       </div>
       <div class="match-score">
-        <span>${m.score.home}</span>
-        <span class="match-score__sep">–</span>
-        <span>${m.score.away}</span>
+        <div class="match-score__main">
+          <span>${hScore}</span>
+          <span class="match-score__sep">–</span>
+          <span>${aScore}</span>
+        </div>
+        ${scoreTag}
+        ${subScore ? `<div class="match-score__sub">${subScore}</div>` : ''}
       </div>
       <div class="match-team match-team--away">
         <span class="flag-emoji" role="img">${m.awayTeam.flag}</span>
@@ -57,7 +78,7 @@ function render() {
     .filter(m => m.status === 'finished' && m.score.home !== null)
     .sort((a,b) => (b.kickoffUtc||0) - (a.kickoffUtc||0));
 
-  const groups = [...new Set(finished.filter(m=>m.group).map(m=>m.group))].sort();
+  const groups  = [...new Set(finished.filter(m=>m.group).map(m=>m.group))].sort();
   const filtered = f.group !== 'all' ? finished.filter(m => m.group === f.group) : finished;
 
   const el = document.createElement('div');
@@ -67,13 +88,11 @@ function render() {
         <h1 class="page-title">Kết Quả</h1>
         <p class="page-subtitle">${finished.length} trận đã hoàn thành</p>
       </div>
-
       <div class="filter-bar" id="results-filters">
         <span class="filter-label">Bảng:</span>
         <button class="filter-chip ${f.group==='all'?'active':''}" data-filter-group="all">Tất cả</button>
         ${groups.map(g => `<button class="filter-chip ${f.group===g?'active':''}" data-filter-group="${g}">${g}</button>`).join('')}
       </div>
-
       <div id="results-list">
         ${filtered.length
           ? `<div class="grid-auto">${filtered.map(resultCardHTML).join('')}</div>`
@@ -84,7 +103,6 @@ function render() {
              </div>`}
       </div>
     </div>`;
-
   return el;
 }
 
@@ -99,12 +117,10 @@ function afterMount() {
     const group = chip.dataset.filterGroup;
     const { filters, matches } = State.get();
     State.set({ filters: { ...filters, results: { ...filters.results, group } } });
-
     const finished = matches
       .filter(m => m.status === 'finished' && m.score.home !== null)
       .sort((a,b) => (b.kickoffUtc||0) - (a.kickoffUtc||0));
     const filtered = group !== 'all' ? finished.filter(m => m.group === group) : finished;
-
     const list = document.getElementById('results-list');
     if (list) {
       list.innerHTML = filtered.length

@@ -16,13 +16,11 @@ const TEAM_META = {
   'Brazil':              { flag: '🇧🇷', code: 'BRA' },
   'Morocco':             { flag: '🇲🇦', code: 'MAR' },
   'Haiti':               { flag: '🇭🇹', code: 'HAI' },
-  // 'Scotland':            { flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', code: 'SCO' },
   'Scotland':            { flag: '<img src="https://flagcdn.com/w20/gb-sct.png" alt="Scotland" class="flag-img">', code: 'SCO' },
   'USA':                 { flag: '🇺🇸', code: 'USA' },
   'Argentina':           { flag: '🇦🇷', code: 'ARG' },
   'Germany':             { flag: '🇩🇪', code: 'GER' },
   'France':              { flag: '🇫🇷', code: 'FRA' },
-  // 'England':             { flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', code: 'ENG' },
   'England':             { flag: '<img src="https://flagcdn.com/w20/gb-eng.png" alt="England"  class="flag-img">', code: 'ENG' },
   'Spain':               { flag: '🇪🇸', code: 'ESP' },
   'Portugal':            { flag: '🇵🇹', code: 'POR' },
@@ -62,9 +60,8 @@ const TEAM_META = {
   'Jamaica':             { flag: '🇯🇲', code: 'JAM' },
   'Honduras':            { flag: '🇭🇳', code: 'HON' },
   'Cuba':                { flag: '🇨🇺', code: 'CUB' },
-  'Morocco':             { flag: '🇲🇦', code: 'MAR' },
-  'Ivory Coast':         { flag: '🇨🇮', code: 'CIV' },
   "Côte d'Ivoire":       { flag: '🇨🇮', code: 'CIV' },
+  'Ivory Coast':         { flag: '🇨🇮', code: 'CIV' },
   'Mali':                { flag: '🇲🇱', code: 'MLI' },
   'DR Congo':            { flag: '🇨🇩', code: 'COD' },
   'Zambia':              { flag: '🇿🇲', code: 'ZAM' },
@@ -86,8 +83,7 @@ const TEAM_META = {
   'Hungary':             { flag: '🇭🇺', code: 'HUN' },
   'Slovakia':            { flag: '🇸🇰', code: 'SVK' },
   'Austria':             { flag: '🇦🇹', code: 'AUT' },
-  // 'Wales':               { flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿', code: 'WAL' },
-  'Wales':               { flag: '<img src="https://flagcdn.com/w20/gb-wls.png" alt="Wales"    class="flag-img">', code: 'WAL' },
+  'Wales':               { flag: '<img src="https://flagcdn.com/w20/gb-wls.png" alt="Wales" class="flag-img">', code: 'WAL' },
   'Ireland':             { flag: '🇮🇪', code: 'IRL' },
   'Iceland':             { flag: '🇮🇸', code: 'ISL' },
   'Cape Verde':          { flag: '🇨🇻', code: 'CPV' },
@@ -100,32 +96,17 @@ function getTeamMeta(name) {
   return TEAM_META[name] || { flag: '🏳️', code: name.slice(0,3).toUpperCase() };
 }
 
-// // Parse "13:00 UTC-6" → UTC Date combined with a date string "2026-06-11"
-// function parseKickoff(dateStr, timeStr) {
-//   if (!timeStr || !dateStr) return null;
-//   try {
-//     const match = timeStr.match(/(\d{2}):(\d{2})\s*UTC([+-]\d+)/);
-//     if (!match) return null;
-//     const [, hh, mm, offset] = match;
-//     const offsetH = parseInt(offset, 10);
-//     // Convert local time to UTC
-//     const utcH = parseInt(hh, 10) - offsetH;
-//     const base = new Date(`${dateStr}T00:00:00Z`);
-//     base.setUTCHours(utcH, parseInt(mm, 10), 0, 0);
-//     return base;
-//   } catch { return null; }
-// }
+// Parse "19:00" (Qatar UTC+3) hoặc "13:00 UTC-6" → UTC Date
 function parseKickoff(dateStr, timeStr) {
   if (!timeStr || !dateStr) return null;
   try {
-    // Format mới: "19:00" (không có UTC offset) → assume UTC+3 (Qatar)
+    // Format mới: "19:00" → assume UTC+3 (Qatar WC2022) hoặc sẽ dùng offset từ config
     const simpleMatch = timeStr.match(/^(\d{2}):(\d{2})$/);
     if (simpleMatch) {
       const [, hh, mm] = simpleMatch;
-      const base = new Date(`${dateStr}T${hh}:${mm}:00+03:00`); // Qatar = UTC+3
-      return base;
+      return new Date(`${dateStr}T${hh}:${mm}:00+03:00`);
     }
-    // Format cũ: "13:00 UTC-6"
+    // Format WC2026: "13:00 UTC-6"
     const offsetMatch = timeStr.match(/(\d{2}):(\d{2})\s*UTC([+-]\d+)/);
     if (offsetMatch) {
       const [, hh, mm, offset] = offsetMatch;
@@ -139,15 +120,15 @@ function parseKickoff(dateStr, timeStr) {
   } catch { return null; }
 }
 
-// Determine match status relative to now
+// Determine match status
 function inferStatus(kickoffUtc, score) {
   if (!kickoffUtc) return 'upcoming';
-  const now = Date.now();
-  const ko = kickoffUtc.getTime();
+  const now  = Date.now();
+  const ko   = kickoffUtc.getTime();
   const diff = now - ko;
   if (score && (score.home !== null || score.away !== null)) return 'finished';
   if (diff < 0) return 'upcoming';
-  if (diff < 115 * 60 * 1000) return 'live'; // within ~115 min
+  if (diff < 115 * 60 * 1000) return 'live';
   return 'finished';
 }
 
@@ -156,27 +137,42 @@ function normalize(raw) {
   return matches.map((m, i) => {
     const kickoffUtc = parseKickoff(m.date, m.time);
     const isKnockout = !m.group;
-    // const homeScore = m.score1 !== undefined ? m.score1 : null;
-    // const awayScore = m.score2 !== undefined ? m.score2 : null;
-    const homeScore = m.score?.ft?.[0] ?? null;
-    const awayScore = m.score?.ft?.[1] ?? null;
-    const score = { home: homeScore, away: awayScore };
+    const s = m.score || {};
+
+    // Ưu tiên: penalty (PSO) > extra time (AET) > full time (FT)
+    const homeScore = s.p?.[0] ?? s.et?.[0] ?? s.ft?.[0] ?? null;
+    const awayScore = s.p?.[1] ?? s.et?.[1] ?? s.ft?.[1] ?? null;
+
+    // Chi tiết từng giai đoạn để hiển thị trên UI
+    const scoreFt  = s.ft ? { home: s.ft[0], away: s.ft[1] } : null;
+    const scoreEt  = s.et ? { home: s.et[0], away: s.et[1] } : null;
+    const scorePen = s.p  ? { home: s.p[0],  away: s.p[1]  } : null;
+    const hasEt    = !!s.et;
+    const hasPen   = !!s.p;
+
+    const score  = { home: homeScore, away: awayScore };
     const status = inferStatus(kickoffUtc, score);
     const homeMeta = getTeamMeta(m.team1);
     const awayMeta = getTeamMeta(m.team2);
+
     return {
-      id:         m.num || i + 1,
-      round:      m.round || '',
-      group:      m.group || '',
-      date:       m.date || '',
+      id:       m.num || i + 1,
+      round:    m.round || '',
+      group:    m.group || '',
+      date:     m.date || '',
       kickoffUtc,
-      venue:      m.ground || '',
+      venue:    m.ground || '',
       homeTeam: { name: m.team1, flag: homeMeta.flag, code: homeMeta.code },
       awayTeam: { name: m.team2, flag: awayMeta.flag, code: awayMeta.code },
-      score,
+      score,      // điểm hiển thị chính (pen > et > ft)
+      scoreFt,    // kết quả 90 phút
+      scoreEt,    // kết quả sau hiệp phụ
+      scorePen,   // penalty shootout
+      hasEt,
+      hasPen,
       status,
       isKnockout,
-      rawTime:    m.time || '',
+      rawTime: m.time || '',
     };
   });
 }
