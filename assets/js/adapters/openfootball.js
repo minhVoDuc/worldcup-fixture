@@ -100,19 +100,42 @@ function getTeamMeta(name) {
   return TEAM_META[name] || { flag: '🏳️', code: name.slice(0,3).toUpperCase() };
 }
 
-// Parse "13:00 UTC-6" → UTC Date combined with a date string "2026-06-11"
+// // Parse "13:00 UTC-6" → UTC Date combined with a date string "2026-06-11"
+// function parseKickoff(dateStr, timeStr) {
+//   if (!timeStr || !dateStr) return null;
+//   try {
+//     const match = timeStr.match(/(\d{2}):(\d{2})\s*UTC([+-]\d+)/);
+//     if (!match) return null;
+//     const [, hh, mm, offset] = match;
+//     const offsetH = parseInt(offset, 10);
+//     // Convert local time to UTC
+//     const utcH = parseInt(hh, 10) - offsetH;
+//     const base = new Date(`${dateStr}T00:00:00Z`);
+//     base.setUTCHours(utcH, parseInt(mm, 10), 0, 0);
+//     return base;
+//   } catch { return null; }
+// }
 function parseKickoff(dateStr, timeStr) {
   if (!timeStr || !dateStr) return null;
   try {
-    const match = timeStr.match(/(\d{2}):(\d{2})\s*UTC([+-]\d+)/);
-    if (!match) return null;
-    const [, hh, mm, offset] = match;
-    const offsetH = parseInt(offset, 10);
-    // Convert local time to UTC
-    const utcH = parseInt(hh, 10) - offsetH;
-    const base = new Date(`${dateStr}T00:00:00Z`);
-    base.setUTCHours(utcH, parseInt(mm, 10), 0, 0);
-    return base;
+    // Format mới: "19:00" (không có UTC offset) → assume UTC+3 (Qatar)
+    const simpleMatch = timeStr.match(/^(\d{2}):(\d{2})$/);
+    if (simpleMatch) {
+      const [, hh, mm] = simpleMatch;
+      const base = new Date(`${dateStr}T${hh}:${mm}:00+03:00`); // Qatar = UTC+3
+      return base;
+    }
+    // Format cũ: "13:00 UTC-6"
+    const offsetMatch = timeStr.match(/(\d{2}):(\d{2})\s*UTC([+-]\d+)/);
+    if (offsetMatch) {
+      const [, hh, mm, offset] = offsetMatch;
+      const offsetH = parseInt(offset, 10);
+      const utcH = parseInt(hh, 10) - offsetH;
+      const base = new Date(`${dateStr}T00:00:00Z`);
+      base.setUTCHours(utcH, parseInt(mm, 10), 0, 0);
+      return base;
+    }
+    return null;
   } catch { return null; }
 }
 
@@ -133,8 +156,10 @@ function normalize(raw) {
   return matches.map((m, i) => {
     const kickoffUtc = parseKickoff(m.date, m.time);
     const isKnockout = !m.group;
-    const homeScore = m.score1 !== undefined ? m.score1 : null;
-    const awayScore = m.score2 !== undefined ? m.score2 : null;
+    // const homeScore = m.score1 !== undefined ? m.score1 : null;
+    // const awayScore = m.score2 !== undefined ? m.score2 : null;
+    const homeScore = m.score?.ft?.[0] ?? null;
+    const awayScore = m.score?.ft?.[1] ?? null;
     const score = { home: homeScore, away: awayScore };
     const status = inferStatus(kickoffUtc, score);
     const homeMeta = getTeamMeta(m.team1);
