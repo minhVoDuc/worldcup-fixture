@@ -11,6 +11,15 @@
   "dataSource": "openfootball",
   "openfootball": {
     "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json",
-    "refreshIntervalMs": 30000
-  }
+    "refreshIntervalMs": 60000
+  },
+  "apiFootball": {
+    "baseUrl": "https://v3.football.api-sports.io",
+    "leagueId": 1,
+    "season": 2026,
+    "apiKey": ""
+  },
+  "timezone": "Asia/Ho_Chi_Minh",
+  "locale": "vi-VN",
+  "theme": "system"
 }

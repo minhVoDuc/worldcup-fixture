@@ -1,8 +1,10 @@
 /* ============================================================
-   WC 2026 — Bracket View  v2.0
-   Rainbow drag scrollbar + connector lines + better sizing
+   WC 2026 — Bracket View  v2.1
+   + Score tag PSO / AET cho trận hiệp phụ/penalty
+   + Round of 32 đã có sẵn trong ROUND_ORDER
    ============================================================ */
 import State from '../state.js';
+import { getMatchWinner } from '../utils/match-result.js';
 
 const ROUND_ORDER = [
   'Round of 32','Round of 16','Quarter-final',
@@ -17,30 +19,59 @@ const ROUND_LABELS = {
   'Final':                 'Chung kết',
 };
 
-// Rainbow gradient stops — matches design system palette
-const RAINBOW = [
-  '#7FAE6E', // matcha
-  '#B8D4A8', // matcha-light
-  '#F9D94E', // gold
-  '#F4A7B9', // pink
-  '#7FAE6E', // loop back
-];
+const RAINBOW = ['#7FAE6E','#B8D4A8','#F9D94E','#F4A7B9','#7FAE6E'];
 const RAINBOW_CSS = `linear-gradient(90deg, ${RAINBOW.join(', ')})`;
 
 function bracketMatchHTML(m) {
   const isFin  = m.status === 'finished';
   const isLive = m.status === 'live';
-  const hWin   = isFin && m.score.home > m.score.away;
-  const aWin   = isFin && m.score.away > m.score.home;
-  const hScore = (isFin || isLive) && m.score.home !== null ? m.score.home : '';
-  const aScore = (isFin || isLive) && m.score.away !== null ? m.score.away : '';
-  const liveClass = isLive ? ' bracket-match--live' : '';
 
+  // // Xác định winner đúng cho cả PSO
+  // const hWin = isFin && (
+  //   m.hasPen ? m.scorePen?.home > m.scorePen?.away
+  //            : m.score.home > m.score.away
+  // );
+  // const aWin = isFin && (
+  //   m.hasPen ? m.scorePen?.away > m.scorePen?.home
+  //            : m.score.away > m.score.home
+  // );
+  // Xác định winner đúng cho cả PSO — dùng getMatchWinner
+  const winner = isFin ? getMatchWinner(m) : null;
+  const hWin = winner && winner.name === m.homeTeam.name;
+  const aWin = winner && winner.name === m.awayTeam.name;
+
+  // Điểm hiển thị: penalty shootout hoặc FT/AET
+  let hScore = '', aScore = '', scoreTag = '';
+  if (isFin || isLive) {
+    if (m.hasPen && m.scorePen) {
+      hScore   = m.scorePen.home;
+      aScore   = m.scorePen.away;
+      scoreTag = '<span class="bracket-score-tag">PSO</span>';
+    } else if (m.hasEt && m.scoreEt) {
+      hScore   = m.scoreEt.home;
+      aScore   = m.scoreEt.away;
+      scoreTag = '<span class="bracket-score-tag">AET</span>';
+    } else if (m.score.home !== null) {
+      hScore = m.score.home;
+      aScore = m.score.away;
+    }
+  }
+
+  // Sub-score: FT dưới PSO, hoặc FT dưới AET
+  let subScore = '';
+  if (isFin && m.hasPen && m.scoreEt) {
+    subScore = `<div class="bracket-sub-score">${m.scoreEt.home}–${m.scoreEt.away} AET · ${m.scoreFt?.home ?? ''}–${m.scoreFt?.away ?? ''} FT</div>`;
+  } else if (isFin && m.hasEt && m.scoreFt) {
+    subScore = `<div class="bracket-sub-score">${m.scoreFt.home}–${m.scoreFt.away} FT</div>`;
+  }
+
+  const liveClass = isLive ? ' bracket-match--live' : '';
   return `
   <div class="bracket-match${liveClass}">
     <div class="bracket-match__header">
       ${isLive ? '<span class="bracket-live-dot"></span>' : ''}
       <span class="bracket-match__label">${m.id ? 'T' + m.id : '—'}</span>
+      ${scoreTag}
     </div>
     <div class="bracket-team ${hWin ? 'bracket-team--winner' : ''}">
       <div class="bracket-team__name">
@@ -56,6 +87,7 @@ function bracketMatchHTML(m) {
       </div>
       <span class="bracket-team__score">${aScore}</span>
     </div>
+    ${subScore}
   </div>`;
 }
 
@@ -84,7 +116,6 @@ function render() {
 
       ${roundKeys.length ? `
       <div class="bracket-outer" id="bracket-outer">
-        <!-- Custom rainbow scrollbar track -->
         <div class="bracket-scrollbar-track" id="bracket-track">
           <div class="bracket-scrollbar-thumb" id="bracket-thumb"></div>
         </div>
@@ -116,39 +147,27 @@ function afterMount() {
   const hint     = document.getElementById('bracket-scroll-hint');
   if (!viewport || !thumb || !track) return;
 
-  // ── Thumb sizing & position ──────────────────────────────
   function updateThumb() {
-    const ratio     = viewport.clientWidth / viewport.scrollWidth;
-    const thumbW    = Math.max(ratio * track.clientWidth, 40);
+    const ratio       = viewport.clientWidth / viewport.scrollWidth;
+    const thumbW      = Math.max(ratio * track.clientWidth, 40);
     const scrollRatio = viewport.scrollLeft / (viewport.scrollWidth - viewport.clientWidth);
-    const maxLeft   = track.clientWidth - thumbW;
-    thumb.style.width = thumbW + 'px';
+    const maxLeft     = track.clientWidth - thumbW;
+    thumb.style.width     = thumbW + 'px';
     thumb.style.transform = `translateX(${scrollRatio * maxLeft}px)`;
-
-    // Hide track if not scrollable
-    track.style.opacity = ratio >= 1 ? '0' : '1';
+    track.style.opacity      = ratio >= 1 ? '0' : '1';
     track.style.pointerEvents = ratio >= 1 ? 'none' : 'auto';
-
-    // Hide scroll hint after first scroll
     if (viewport.scrollLeft > 20 && hint) hint.style.opacity = '0';
   }
 
-  // ── Rainbow animation on drag ────────────────────────────
-  let isDragging   = false;
-  let dragStartX   = 0;
-  let dragScrollX  = 0;
-  let rainbowAngle = 0;
-  let rafId        = null;
+  let isDragging = false, dragStartX = 0, dragScrollX = 0;
+  let rainbowAngle = 0, rafId = null;
 
   function setRainbow(active) {
     if (active) {
-      // Animate rainbow gradient position
       cancelAnimationFrame(rafId);
       function animate() {
         rainbowAngle = (rainbowAngle + 1.5) % 360;
-        const stops = RAINBOW.map((c, i) =>
-          `${c} ${Math.round((i / (RAINBOW.length - 1)) * 100)}%`
-        ).join(', ');
+        const stops = RAINBOW.map((c,i) => `${c} ${Math.round(i/(RAINBOW.length-1)*100)}%`).join(', ');
         thumb.style.background = `linear-gradient(${rainbowAngle}deg, ${stops})`;
         viewport.style.cursor = 'grabbing';
         if (isDragging) rafId = requestAnimationFrame(animate);
@@ -156,89 +175,49 @@ function afterMount() {
       rafId = requestAnimationFrame(animate);
     } else {
       cancelAnimationFrame(rafId);
-      // Fade back to matcha gradient
       thumb.style.background = '';
-      viewport.style.cursor = '';
+      viewport.style.cursor  = '';
     }
   }
 
-  // Drag on viewport (mouse)
   viewport.addEventListener('mousedown', e => {
     if (e.button !== 0) return;
-    isDragging  = true;
-    dragStartX  = e.clientX;
-    dragScrollX = viewport.scrollLeft;
-    setRainbow(true);
-    e.preventDefault();
+    isDragging = true; dragStartX = e.clientX; dragScrollX = viewport.scrollLeft;
+    setRainbow(true); e.preventDefault();
   });
   document.addEventListener('mousemove', e => {
     if (!isDragging) return;
-    const dx = e.clientX - dragStartX;
-    viewport.scrollLeft = dragScrollX - dx;
+    viewport.scrollLeft = dragScrollX - (e.clientX - dragStartX);
     updateThumb();
   });
-  document.addEventListener('mouseup', () => {
-    if (isDragging) { isDragging = false; setRainbow(false); }
-  });
+  document.addEventListener('mouseup', () => { if (isDragging) { isDragging = false; setRainbow(false); } });
 
-  // Touch drag
-  let touchStartX  = 0;
-  let touchScrollX = 0;
-  viewport.addEventListener('touchstart', e => {
-    touchStartX  = e.touches[0].clientX;
-    touchScrollX = viewport.scrollLeft;
-    setRainbow(true);
-  }, { passive: true });
-  viewport.addEventListener('touchmove', e => {
-    const dx = e.touches[0].clientX - touchStartX;
-    viewport.scrollLeft = touchScrollX - dx;
-    updateThumb();
-  }, { passive: true });
-  viewport.addEventListener('touchend', () => setRainbow(false));
-
-  // Scroll → update thumb
+  let touchStartX = 0, touchScrollX = 0;
+  viewport.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; touchScrollX = viewport.scrollLeft; setRainbow(true); }, { passive: true });
+  viewport.addEventListener('touchmove',  e => { viewport.scrollLeft = touchScrollX - (e.touches[0].clientX - touchStartX); updateThumb(); }, { passive: true });
+  viewport.addEventListener('touchend',   () => setRainbow(false));
   viewport.addEventListener('scroll', updateThumb, { passive: true });
 
-  // Drag on scrollbar thumb
-  let thumbDrag = false;
-  let thumbStartX = 0;
-  let thumbScrollX = 0;
+  let thumbDrag = false, thumbStartX = 0, thumbScrollX = 0;
   thumb.addEventListener('mousedown', e => {
-    thumbDrag    = true;
-    thumbStartX  = e.clientX;
-    thumbScrollX = viewport.scrollLeft;
-    isDragging   = true;
-    setRainbow(true);
-    e.stopPropagation();
-    e.preventDefault();
+    thumbDrag = true; thumbStartX = e.clientX; thumbScrollX = viewport.scrollLeft;
+    isDragging = true; setRainbow(true); e.stopPropagation(); e.preventDefault();
   });
   document.addEventListener('mousemove', e => {
     if (!thumbDrag) return;
-    const trackW  = track.clientWidth;
-    const thumbW  = thumb.clientWidth;
-    const scrollW = viewport.scrollWidth - viewport.clientWidth;
-    const ratio   = scrollW / (trackW - thumbW);
+    const ratio = (viewport.scrollWidth - viewport.clientWidth) / (track.clientWidth - thumb.clientWidth);
     viewport.scrollLeft = thumbScrollX + (e.clientX - thumbStartX) * ratio;
     updateThumb();
   });
-  document.addEventListener('mouseup', () => {
-    if (thumbDrag) { thumbDrag = false; isDragging = false; setRainbow(false); }
-  });
-
-  // Click on track → jump
+  document.addEventListener('mouseup', () => { if (thumbDrag) { thumbDrag = false; isDragging = false; setRainbow(false); } });
   track.addEventListener('click', e => {
     if (e.target === thumb) return;
-    const rect     = track.getBoundingClientRect();
-    const clickX   = e.clientX - rect.left;
-    const ratio    = clickX / track.clientWidth;
+    const ratio = (e.clientX - track.getBoundingClientRect().left) / track.clientWidth;
     viewport.scrollLeft = ratio * (viewport.scrollWidth - viewport.clientWidth);
     updateThumb();
   });
 
-  // Parse flags
   if (window.WC_PARSE_FLAGS) window.WC_PARSE_FLAGS();
-
-  // Initial state
   updateThumb();
   window.addEventListener('resize', updateThumb);
 }
