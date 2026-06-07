@@ -1,0 +1,16 @@
+{
+  "tournament": {
+    "name": "FIFA World Cup 2018™",
+    "nameShort": "WC 2018",
+    "startDate": "2018-06-14",
+    "endDate": "2018-07-15",
+    "hosts": ["Russia"],
+    "totalTeams": 32,
+    "totalMatches": 64
+  },
+  "dataSource": "openfootball",
+  "openfootball": {
+    "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/master/2018/worldcup.json",
+    "refreshIntervalMs": 60000
+  }
+}
