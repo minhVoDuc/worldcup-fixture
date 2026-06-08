@@ -81,8 +81,13 @@ const TEAM_META = {
   'Uzbekistan':          { flag: '🇺🇿', code: 'UZB' },
   'Russia':              { flag: '🇷🇺', code: 'RUS' },
   'Iceland':             { flag: '🇮🇸', code: 'ISL' },
+  'Austria':             { flag: '🇦🇹', code: 'AUT' },
   'Wales':               { flag: '<img src="https://flagcdn.com/w20/gb-wls.png" alt="Wales" class="flag-img">', code: 'WAL' },
   'Panama':              { flag: '🇵🇦', code: 'PAN' },
+  'Cape Verde':          { flag: '🇨🇻', code: 'CPV' },
+  'Curaçao':             { flag: '🇨🇼', code: 'CUW' },
+  'Iraq':                { flag: '🇮🇶', code: 'IRQ' },
+  'Jordan':              { flag: '🇯🇴', code: 'JOR' },
 };
 
 function getTeamMeta(name) {
