@@ -12,6 +12,38 @@ let retroThemeActive = false;
 let logoTapCount = 0;
 let retroTapCount = 0;
 let logoTapTimer = null;
+let easterAudio = null;
+let easterAudioSrc = null;
+
+function playEasterSound(src, volume = 0.45, loop = false) {
+  stopEasterSound();
+
+  easterAudio = new Audio(src);
+  easterAudioSrc = src;
+  easterAudio.volume = volume;
+  easterAudio.loop = loop;
+
+  easterAudio.play().catch(() => {});
+}
+
+function pauseEasterSound() {
+  if (!easterAudio) return;
+  easterAudio.pause();
+}
+
+function resumeEasterSound() {
+  if (!easterAudio) return;
+  easterAudio.play().catch(() => {});
+}
+
+function stopEasterSound() {
+  if (!easterAudio) return;
+
+  easterAudio.pause();
+  easterAudio.currentTime = 0;
+  easterAudio = null;
+  easterAudioSrc = null;
+}
 
 /* ── Khóa / mở khóa base theme ─────────────────────────────── */
 function lockBaseTheme() {
@@ -61,6 +93,21 @@ function runSecret(code) {
 
   const value = String(code || '').trim().toLowerCase();
 
+  if (value === 'pause') {
+    pauseEasterSound();
+    return { ok: true, message: 'Music paused ⏸️' };
+  }
+
+  if (value === 'resume') {
+    resumeEasterSound();
+    return { ok: true, message: 'Music resumed ▶️' };
+  }
+
+  if (value === 'stop') {
+    stopEasterSound();
+    return { ok: true, message: 'Music stopped ⏹️' };
+  }
+
   if (value === 'babylele') {
     triggerBabyLele();
     return {
@@ -104,15 +151,35 @@ function triggerBabyLele() {
 
   const overlay = document.createElement('div');
   overlay.className = 'babylele-overlay';
+
   overlay.innerHTML = `
-    <div class="babylele-scene" aria-hidden="true">
+    <button class="babylele-close" aria-label="Close">
+      ✕ Close
+    </button>
+
+    <div class="babylele-scene">
       <div class="babylele-title">BABYLELE</div>
+
       <div class="babylele-rainbow">
-        <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
     </div>
   `;
+  overlay
+    .querySelector('.babylele-close')
+    .addEventListener('click', () => {
+      overlay.classList.add('is-leaving');
 
+      setTimeout(() => {
+        overlay.remove();
+      }, 420);
+    });
   document.body.appendChild(overlay);
 
   const sparkleLayer = document.createElement('div');
@@ -130,10 +197,19 @@ function triggerBabyLele() {
     sparkleLayer.appendChild(sparkle);
   }
 
-  setTimeout(() => {
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'babylele-close';
+  closeBtn.innerHTML = '✕ Close';
+
+  overlay.appendChild(closeBtn);
+
+  closeBtn.addEventListener('click', () => {
     overlay.classList.add('is-leaving');
-    setTimeout(() => overlay.remove(), 420);
-  }, 10000);
+
+    setTimeout(() => {
+      overlay.remove();
+    }, 420);
+  });
 }
 
 function triggerBirthdayRain() {
@@ -187,7 +263,7 @@ function triggerBirthdayRain() {
 }
 
 function triggerLoveBloom() {
-  playEasterSound('./assets/sounds/love.mp3', 0.45);
+  playEasterSound('./assets/sounds/love.mp3', 0.6);
   document.querySelector('.lovebloom-banner')?.remove();
   document.querySelector('.lovebloom-rain')?.remove();
 
@@ -406,12 +482,12 @@ function bindRetroLogoTap() {
   });
 }
 
-function playEasterSound(src, volume = 0.45) {
-  const audio = new Audio(src);
-  audio.volume = volume;
-  audio.currentTime = 0;
-  audio.play().catch(() => {});
-}
+// function playEasterSound(src, volume = 0.45) {
+//   const audio = new Audio(src);
+//   audio.volume = volume;
+//   audio.currentTime = 0;
+//   audio.play().catch(() => {});
+// }
 
 /* ── Entry point ─────────────────────────────────────────────── */
 export function initEasterEggs() {
