@@ -50,8 +50,24 @@ function toast(message, type = 'success', duration = 2400) {
 
 /* ── Xử lý secret code ──────────────────────────────────────── */
 function runSecret(code) {
+  if (['24/01', '08/07'].includes(String(code || '').trim())) {
+    triggerBirthdayRain();
+    return {
+      ok: true,
+      message: 'Happy birthday unlocked 🎂🎉',
+    };
+  }
+
   const value = String(code || '').trim().toLowerCase();
 
+  if (value === '07/06/2026') {
+    triggerLoveBloom();
+    return {
+      ok: true,
+      message: 'Love bloom unlocked 💗🌷',
+    };
+  }
+    
   if (value === 'babycrab') {
     triggerBabyCrab();
     return {
@@ -73,6 +89,106 @@ function runSecret(code) {
   };
 }
 
+function triggerBirthdayRain() {
+  document.querySelector('.birthday-banner')?.remove();
+  document.querySelector('.birthday-rain')?.remove();
+
+  const banner = document.createElement('div');
+  banner.className = 'birthday-banner';
+  banner.innerHTML = 'HAPPY BIRTHDAY 🎂';
+
+  const rain = document.createElement('div');
+  rain.className = 'birthday-rain';
+
+  document.body.appendChild(rain);
+  document.body.appendChild(banner);
+  playEasterSound('./assets/sounds/birthday.mp3', 0.45);
+
+  const emojis = ['🎉', '🎁', '🥳', '✨', '🎈'];
+
+  const createItem = () => {
+    const item = document.createElement('span');
+    item.className = 'birthday-item';
+    item.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+    item.style.left = `${Math.random() * 100}vw`;
+    item.style.fontSize = `${16 + Math.random() * 24}px`;
+
+    const duration = `${4 + Math.random() * 4}s`;
+    item.style.animationDuration = duration;
+    item.style.setProperty('--birthday-duration', duration);
+
+    item.style.opacity = `${0.55 + Math.random() * 0.45}`;
+    item.style.setProperty('--birthday-sway', `${-36 + Math.random() * 72}px`);
+    item.style.setProperty('--birthday-rotate', `${-180 + Math.random() * 360}deg`);
+
+    rain.appendChild(item);
+    setTimeout(() => item.remove(), 9000);
+  };
+
+  for (let i = 0; i < 32; i++) {
+    setTimeout(createItem, i * 65);
+  }
+
+  const birthdayInterval = setInterval(createItem, 120);
+
+  setTimeout(() => {
+    clearInterval(birthdayInterval);
+    banner.remove();
+    setTimeout(() => rain.remove(), 9000);
+  }, 7000);
+}
+
+function triggerLoveBloom() {
+  document.querySelector('.lovebloom-banner')?.remove();
+  document.querySelector('.lovebloom-rain')?.remove();
+
+  const banner = document.createElement('div');
+  banner.className = 'lovebloom-banner';
+  banner.innerHTML = '💗 07/06/2026 💗';
+
+  const rain = document.createElement('div');
+  rain.className = 'lovebloom-rain';
+
+  document.body.appendChild(rain);
+  document.body.appendChild(banner);
+  playEasterSound('./assets/sounds/love.mp3', 0.45);
+
+  const emojis = ['💗', '🌷'];
+
+  const createItem = () => {
+    const item = document.createElement('span');
+    item.className = 'lovebloom-item';
+
+    item.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    item.style.left = `${Math.random() * 100}vw`;
+    item.style.fontSize = `${16 + Math.random() * 24}px`;
+
+    const duration = `${4 + Math.random() * 4}s`;
+    item.style.animationDuration = duration;
+    item.style.setProperty('--lovebloom-duration', duration);
+
+    item.style.opacity = `${0.55 + Math.random() * 0.45}`;
+    item.style.setProperty('--lovebloom-sway', `${-36 + Math.random() * 72}px`);
+    item.style.setProperty('--lovebloom-rotate', `${-180 + Math.random() * 360}deg`);
+
+    rain.appendChild(item);
+    setTimeout(() => item.remove(), 9000);
+  };
+
+  for (let i = 0; i < 32; i++) {
+    setTimeout(createItem, i * 65);
+  }
+
+  const bloomInterval = setInterval(createItem, 120);
+
+  setTimeout(() => {
+    clearInterval(bloomInterval);
+    banner.remove();
+    setTimeout(() => rain.remove(), 9000);
+  }, 7000);
+}
+
 function triggerBabyCrab() {
   document.querySelector('.babycrab-banner')?.remove();
   document.querySelector('.babycrab-rain')?.remove();
@@ -81,7 +197,7 @@ function triggerBabyCrab() {
   rain.className = 'babycrab-rain';
 
   document.body.appendChild(rain);
-
+  playEasterSound('./assets/sounds/babycrab.mp3', 0.45);
   const createCrab = () => {
     const crab = document.createElement('span');
     crab.className = 'babycrab-item';
@@ -241,6 +357,13 @@ function bindRetroLogoTap() {
       disableRetroTheme();
     }
   });
+}
+
+function playEasterSound(src, volume = 0.45) {
+  const audio = new Audio(src);
+  audio.volume = volume;
+  audio.currentTime = 0;
+  audio.play().catch(() => {});
 }
 
 /* ── Entry point ─────────────────────────────────────────────── */

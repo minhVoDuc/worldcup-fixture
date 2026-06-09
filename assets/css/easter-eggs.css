@@ -906,3 +906,189 @@ html[data-easter-theme="retro"] [data-theme-toggle] {
     border-width: 1px !important;
   }
 }
+
+.lovebloom-banner {
+  position: fixed;
+  top: max(16px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100003;
+
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  padding: clamp(10px, 2.6vw, 16px) clamp(18px, 5vw, 32px);
+
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fce4ec, #f4a7b9);
+  color: #7a3048;
+
+  font-family: 'Baloo 2', 'Nunito', sans-serif;
+  font-size: clamp(1.15rem, 5vw, 2rem);
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+
+  box-shadow: 0 12px 30px rgba(122, 48, 72, 0.22);
+  animation: lovebloom-banner-pop 0.4s ease;
+}
+
+.lovebloom-rain {
+  position: fixed;
+  inset: 0;
+  z-index: 100002;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.lovebloom-item {
+  position: fixed;
+  top: -64px;
+  display: block;
+  line-height: 1;
+  will-change: transform;
+  animation-name: lovebloom-fall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes lovebloom-banner-pop {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.75);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes lovebloom-fall {
+  from {
+    transform: translate3d(0, -80px, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate3d(var(--lovebloom-sway), 50vh, 0) rotate(var(--lovebloom-rotate));
+  }
+
+  to {
+    transform: translate3d(0, calc(100vh + 140px), 0) rotate(360deg);
+  }
+}
+
+@media (max-width: 480px) {
+  .lovebloom-banner {
+    top: max(12px, env(safe-area-inset-top));
+    max-width: calc(100vw - 20px);
+    letter-spacing: 0.02em;
+  }
+
+  .lovebloom-item {
+    top: -52px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lovebloom-banner {
+    animation-duration: 0.01ms !important;
+  }
+
+  .lovebloom-item {
+    animation-duration: var(--lovebloom-duration, 5s) !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+.birthday-banner {
+  position: fixed;
+  top: max(16px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100003;
+
+  max-width: calc(100vw - 32px);
+  padding: clamp(10px, 2.6vw, 16px) clamp(18px, 5vw, 32px);
+  border-radius: 999px;
+
+  background: linear-gradient(135deg, #fff3bf, #f4a7b9);
+  color: #7a3048;
+
+  font-family: 'Baloo 2', 'Nunito', sans-serif;
+  font-size: clamp(1.1rem, 5vw, 2rem);
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+
+  box-shadow: 0 12px 30px rgba(122, 48, 72, 0.22);
+  animation: birthday-banner-pop 0.4s ease;
+}
+
+.birthday-rain {
+  position: fixed;
+  inset: 0;
+  z-index: 100002;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.birthday-item {
+  position: fixed;
+  top: -64px;
+  display: block;
+  line-height: 1;
+  will-change: transform;
+  animation-name: birthday-fall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes birthday-banner-pop {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.75);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes birthday-fall {
+  from {
+    transform: translate3d(0, -80px, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate3d(var(--birthday-sway), 50vh, 0) rotate(var(--birthday-rotate));
+  }
+
+  to {
+    transform: translate3d(0, calc(100vh + 140px), 0) rotate(360deg);
+  }
+}
+
+@media (max-width: 480px) {
+  .birthday-banner {
+    top: max(12px, env(safe-area-inset-top));
+    max-width: calc(100vw - 20px);
+  }
+
+  .birthday-item {
+    top: -52px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .birthday-banner {
+    animation-duration: 0.01ms !important;
+  }
+
+  .birthday-item {
+    animation-duration: var(--birthday-duration, 5s) !important;
+    animation-iteration-count: 1 !important;
+  }
+}
