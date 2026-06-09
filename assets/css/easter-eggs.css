@@ -784,3 +784,125 @@ html[data-easter-theme="mu"] .group-header h3 {
     animation-iteration-count: 1 !important;
   }
 }
+
+html[data-easter-theme="retro"] {
+  --c-bg: #f2f2f2;
+  --c-surface: #ffffff;
+  --c-text: #111111;
+  --c-muted: #555555;
+  --c-border: #111111;
+}
+
+html[data-easter-theme="retro"],
+html[data-easter-theme="retro"] body {
+  background: #f2f2f2 !important;
+  color: #111111 !important;
+  font-family: "Courier New", ui-monospace, monospace !important;
+}
+
+html[data-easter-theme="retro"] *,
+html[data-easter-theme="retro"] *::before,
+html[data-easter-theme="retro"] *::after {
+  font-family: "Courier New", ui-monospace, monospace !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+html[data-easter-theme="retro"] .site-header,
+html[data-easter-theme="retro"] .header-inner,
+html[data-easter-theme="retro"] .phase-banner,
+html[data-easter-theme="retro"] .mobile-nav {
+  background: #111111 !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+html[data-easter-theme="retro"] .site-header *,
+html[data-easter-theme="retro"] .header-inner *,
+html[data-easter-theme="retro"] .phase-banner *,
+html[data-easter-theme="retro"] .mobile-nav * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+html[data-easter-theme="retro"] .main-nav .is-active,
+html[data-easter-theme="retro"] .main-nav [aria-current="page"],
+html[data-easter-theme="retro"] .mobile-nav .active,
+html[data-easter-theme="retro"] .mobile-nav .is-active,
+html[data-easter-theme="retro"] .mobile-nav [aria-current="page"] {
+  background: #ffffff !important;
+  color: #111111 !important;
+  border: 1px solid #111111 !important;
+}
+
+html[data-easter-theme="retro"] .main-nav .is-active *,
+html[data-easter-theme="retro"] .main-nav [aria-current="page"] *,
+html[data-easter-theme="retro"] .mobile-nav .active *,
+html[data-easter-theme="retro"] .mobile-nav .is-active *,
+html[data-easter-theme="retro"] .mobile-nav [aria-current="page"] * {
+  color: #111111 !important;
+  -webkit-text-fill-color: #111111 !important;
+  stroke: #111111 !important;
+}
+
+html[data-easter-theme="retro"] .countdown-hero,
+html[data-easter-theme="retro"] .hero-banner,
+html[data-easter-theme="retro"] .hero-card,
+html[data-easter-theme="retro"] .match-card,
+html[data-easter-theme="retro"] .info-card,
+html[data-easter-theme="retro"] .summary-card,
+html[data-easter-theme="retro"] .stats-card,
+html[data-easter-theme="retro"] .table-wrap,
+html[data-easter-theme="retro"] .standings-table,
+html[data-easter-theme="retro"] .bracket-match,
+html[data-easter-theme="retro"] .modal-card,
+html[data-easter-theme="retro"] .empty-state,
+html[data-easter-theme="retro"] .empty-results,
+html[data-easter-theme="retro"] footer,
+html[data-easter-theme="retro"] .site-footer {
+  background: #ffffff !important;
+  color: #111111 !important;
+  border: 2px solid #111111 !important;
+}
+
+html[data-easter-theme="retro"] h1,
+html[data-easter-theme="retro"] h2,
+html[data-easter-theme="retro"] h3,
+html[data-easter-theme="retro"] p,
+html[data-easter-theme="retro"] small,
+html[data-easter-theme="retro"] span,
+html[data-easter-theme="retro"] td,
+html[data-easter-theme="retro"] th,
+html[data-easter-theme="retro"] .section-title,
+html[data-easter-theme="retro"] .page-title,
+html[data-easter-theme="retro"] .info-card__value,
+html[data-easter-theme="retro"] .countdown-value {
+  color: #111111 !important;
+  -webkit-text-fill-color: #111111 !important;
+}
+
+html[data-easter-theme="retro"] .badge,
+html[data-easter-theme="retro"] .btn,
+html[data-easter-theme="retro"] .view-all-btn,
+html[data-easter-theme="retro"] .filter-chip,
+html[data-easter-theme="retro"] .group-pill,
+html[data-easter-theme="retro"] button {
+  background: #ffffff !important;
+  color: #111111 !important;
+  border: 2px solid #111111 !important;
+}
+
+html[data-easter-theme="retro"] [data-theme-toggle] {
+  opacity: 0.45;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  html[data-easter-theme="retro"] .site-header,
+  html[data-easter-theme="retro"] .mobile-nav {
+    border-width: 1px !important;
+  }
+}
