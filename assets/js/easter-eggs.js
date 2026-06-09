@@ -8,6 +8,10 @@
 
 let muThemeActive = false;
 let previousBaseTheme = null;
+let retroThemeActive = false;
+let logoTapCount = 0;
+let retroTapCount = 0;
+let logoTapTimer = null;
 
 /* ── Khóa / mở khóa base theme ─────────────────────────────── */
 function lockBaseTheme() {
@@ -183,7 +187,64 @@ function buildLauncher() {
   document.body.appendChild(btn);
 }
 
+function enableRetroTheme() {
+  if (retroThemeActive) return;
+
+  retroThemeActive = true;
+  lockBaseTheme();
+
+  document.documentElement.setAttribute('data-easter-theme', 'retro');
+  toast('Retro mode unlocked 👾');
+}
+
+function disableRetroTheme() {
+  if (!retroThemeActive) return;
+
+  retroThemeActive = false;
+  document.documentElement.removeAttribute('data-easter-theme');
+  restoreBaseTheme();
+
+  toast('Đã quay về theme mặc định');
+}
+
+function bindRetroLogoTap() {
+  const logo = document.querySelector('.site-logo');
+  if (!logo || logo.dataset.retroBound === 'true') return;
+
+  logo.dataset.retroBound = 'true';
+  logo.style.cursor = 'pointer';
+
+  logo.addEventListener('click', () => {
+    clearTimeout(logoTapTimer);
+    logoTapTimer = setTimeout(() => {
+      logoTapCount = 0;
+      retroTapCount = 0;
+    }, 1600);
+
+    if (!retroThemeActive) {
+      logoTapCount += 1;
+      retroTapCount = 0;
+
+      if (logoTapCount >= 7) {
+        logoTapCount = 0;
+        enableRetroTheme();
+      }
+
+      return;
+    }
+
+    retroTapCount += 1;
+    logoTapCount = 0;
+
+    if (retroTapCount >= 6) {
+      retroTapCount = 0;
+      disableRetroTheme();
+    }
+  });
+}
+
 /* ── Entry point ─────────────────────────────────────────────── */
 export function initEasterEggs() {
   buildLauncher();
+  bindRetroLogoTap();
 }
