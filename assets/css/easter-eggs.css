@@ -695,3 +695,92 @@ html[data-easter-theme="mu"] .group-header h3 {
   -webkit-text-fill-color: #F0D266 !important;
   text-shadow: 0 1px 6px rgba(60,0,0,.16) !important;
 }
+.babycrab-banner {
+  position: fixed;
+  top: max(16px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100003;
+
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  padding: clamp(10px, 2.6vw, 16px) clamp(18px, 5vw, 32px);
+
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fce4ec, #f4a7b9);
+  color: #7a3048;
+
+  font-family: 'Baloo 2', 'Nunito', sans-serif;
+  font-size: clamp(1.25rem, 5vw, 2rem);
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+
+  box-shadow: 0 12px 30px rgba(122, 48, 72, 0.22);
+  animation: babycrab-banner-pop 0.4s ease;
+}
+
+.babycrab-rain {
+  position: fixed;
+  inset: 0;
+  z-index: 100002;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.babycrab-item {
+  position: fixed;
+  top: -64px;
+  display: block;
+  line-height: 1;
+  will-change: transform;
+  animation-name: babycrab-fall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes babycrab-banner-pop {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.75);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes babycrab-fall {
+  from {
+    transform: translate3d(0, -80px, 0) rotate(0deg);
+  }
+
+  to {
+    transform: translate3d(0, calc(100vh + 140px), 0) rotate(720deg);
+  }
+}
+
+@media (max-width: 480px) {
+  .babycrab-banner {
+    top: max(12px, env(safe-area-inset-top));
+    max-width: calc(100vw - 20px);
+    letter-spacing: 0.02em;
+  }
+
+  .babycrab-item {
+    top: -52px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .babycrab-banner {
+    animation-duration: 0.01ms !important;
+  }
+
+  .babycrab-item {
+    animation-duration: var(--babycrab-duration, 5s) !important;
+    animation-iteration-count: 1 !important;
+  }
+}

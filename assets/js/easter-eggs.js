@@ -48,6 +48,14 @@ function toast(message, type = 'success', duration = 2400) {
 function runSecret(code) {
   const value = String(code || '').trim().toLowerCase();
 
+  if (value === 'babycrab') {
+    triggerBabyCrab();
+    return {
+      ok: true,
+      message: '🦀 Babycrab unlocked!',
+    };
+  }
+
   if (value !== 'mu') {
     return { ok: false, message: 'Sai secret code rồi 🤔' };
   }
@@ -59,6 +67,44 @@ function runSecret(code) {
       ? 'Manchester United vibes 🔴 đã bật'
       : 'MU theme đã tắt',
   };
+}
+
+function triggerBabyCrab() {
+  document.querySelector('.babycrab-banner')?.remove();
+  document.querySelector('.babycrab-rain')?.remove();
+
+  const rain = document.createElement('div');
+  rain.className = 'babycrab-rain';
+
+  document.body.appendChild(rain);
+
+  const createCrab = () => {
+    const crab = document.createElement('span');
+    crab.className = 'babycrab-item';
+    crab.textContent = '🦀';
+
+    crab.style.left = `${Math.random() * 100}vw`;
+    crab.style.fontSize = `${16 + Math.random() * 22}px`;
+    const duration = `${4 + Math.random() * 4}s`;
+    crab.style.animationDuration = duration;
+    crab.style.setProperty('--babycrab-duration', duration);
+    crab.style.opacity = `${0.55 + Math.random() * 0.45}`;
+
+    rain.appendChild(crab);
+    setTimeout(() => crab.remove(), 9000);
+  };
+
+  for (let i = 0; i < 28; i++) {
+    setTimeout(createCrab, i * 70);
+  }
+
+  const crabInterval = setInterval(createCrab, 130);
+
+  setTimeout(() => {
+    clearInterval(crabInterval);
+    banner.remove();
+    setTimeout(() => rain.remove(), 9000);
+  }, 7000);
 }
 
 /* ── Dialog ─────────────────────────────────────────────────── */
