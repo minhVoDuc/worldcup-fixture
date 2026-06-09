@@ -36,7 +36,7 @@ function toggleMUTheme() {
     lockBaseTheme();
     html.setAttribute('data-easter-theme', 'mu');
     toast('Manchester United vibes 🔴 đã bật');
-    playEasterSound('./assets/sounds/manutd.mp3', 0.45);
+    playEasterSound('./assets/sounds/manutd.mp3', 1);
   } else {
     html.removeAttribute('data-easter-theme');
     restoreBaseTheme();
