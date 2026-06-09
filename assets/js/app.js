@@ -4,6 +4,7 @@
 import State      from './state.js';
 import Router     from './router.js';
 import DataSource from './data-source.js';
+import { initEasterEggs } from './easter-eggs.js';
 
 /* ── Theme toggle ─────────────────────────────────────────── */
 function initTheme() {
@@ -76,7 +77,8 @@ function updatePhaseBanner() {
 /* ── Init ─────────────────────────────────────────────────── */
 async function init() {
   initTheme();
-
+  initEasterEggs();
+  
   let config;
   try {
     const res = await fetch('./data/config.json');
