@@ -99,6 +99,7 @@ function runSecret(code) {
 }
 
 function triggerBabyLele() {
+  playEasterSound('./assets/sounds/opalite.mp3', 0.8);
   document.querySelector('.babylele-overlay')?.remove();
 
   const overlay = document.createElement('div');
@@ -186,6 +187,7 @@ function triggerBirthdayRain() {
 }
 
 function triggerLoveBloom() {
+  playEasterSound('./assets/sounds/love.mp3', 0.45);
   document.querySelector('.lovebloom-banner')?.remove();
   document.querySelector('.lovebloom-rain')?.remove();
 
@@ -198,7 +200,6 @@ function triggerLoveBloom() {
 
   document.body.appendChild(rain);
   document.body.appendChild(banner);
-  playEasterSound('./assets/sounds/love.mp3', 0.45);
 
   const emojis = ['💗', '🌷'];
 
