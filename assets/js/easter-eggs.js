@@ -36,6 +36,7 @@ function toggleMUTheme() {
     lockBaseTheme();
     html.setAttribute('data-easter-theme', 'mu');
     toast('Manchester United vibes 🔴 đã bật');
+    playEasterSound('./assets/sounds/manutd.mp3', 0.45);
   } else {
     html.removeAttribute('data-easter-theme');
     restoreBaseTheme();
@@ -60,6 +61,14 @@ function runSecret(code) {
 
   const value = String(code || '').trim().toLowerCase();
 
+  if (value === 'babylele') {
+    triggerBabyLele();
+    return {
+      ok: true,
+      message: 'BABYLELE unlocked 🌈',
+    };
+  }
+
   if (value === '07/06/2026') {
     triggerLoveBloom();
     return {
@@ -76,17 +85,54 @@ function runSecret(code) {
     };
   }
 
-  if (value !== 'mu') {
-    return { ok: false, message: 'Sai secret code rồi 🤔' };
+  if (value === 'mu') {
+    toggleMUTheme();
+    return {
+      ok: true,
+      message: muThemeActive
+        ? 'Manchester United vibes 🔴 đã bật'
+        : 'MU theme đã tắt',
+    };
   }
 
-  toggleMUTheme();
-  return {
-    ok: true,
-    message: muThemeActive
-      ? 'Manchester United vibes 🔴 đã bật'
-      : 'MU theme đã tắt',
-  };
+  return { ok: false, message: 'Sai secret code rồi 🤔' };
+}
+
+function triggerBabyLele() {
+  document.querySelector('.babylele-overlay')?.remove();
+
+  const overlay = document.createElement('div');
+  overlay.className = 'babylele-overlay';
+  overlay.innerHTML = `
+    <div class="babylele-scene" aria-hidden="true">
+      <div class="babylele-title">BABYLELE</div>
+      <div class="babylele-rainbow">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  const sparkleLayer = document.createElement('div');
+  sparkleLayer.className = 'babylele-sparkles';
+  overlay.appendChild(sparkleLayer);
+
+  for (let i = 0; i < 42; i++) {
+    const sparkle = document.createElement('span');
+    sparkle.textContent = Math.random() > 0.35 ? '✨' : '⭐';
+    sparkle.style.left = `${8 + Math.random() * 84}%`;
+    sparkle.style.top = `${12 + Math.random() * 72}%`;
+    sparkle.style.fontSize = `${12 + Math.random() * 18}px`;
+    sparkle.style.animationDelay = `${Math.random() * 2.5}s`;
+    sparkle.style.animationDuration = `${1.4 + Math.random() * 1.8}s`;
+    sparkleLayer.appendChild(sparkle);
+  }
+
+  setTimeout(() => {
+    overlay.classList.add('is-leaving');
+    setTimeout(() => overlay.remove(), 420);
+  }, 10000);
 }
 
 function triggerBirthdayRain() {
