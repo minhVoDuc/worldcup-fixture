@@ -320,7 +320,7 @@ function triggerBabyCrab() {
   rain.className = 'babycrab-rain';
 
   document.body.appendChild(rain);
-  playEasterSound('./assets/sounds/babycrab.mp3', 0.45);
+  playEasterSound('./assets/sounds/iam.mp3', 0.6);
   const createCrab = () => {
     const crab = document.createElement('span');
     crab.className = 'babycrab-item';
